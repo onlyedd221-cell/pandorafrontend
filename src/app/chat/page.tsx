@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -101,7 +102,7 @@ export default function ChatPage() {
         </h1>
 
         {/* Chat area pinned to bottom */}
-        <div className="flex-1 bg-gray-900 rounded-xl p-3 sm:p-4 flex flex-col overflow-y-auto space-y-3">
+        <div className="flex-1 bg-gray-900 rounded-xl p- sm:p-4 flex flex-col overflow-y-auto space-y-3">
           {messages.map((msg) => (
             <div
               key={msg.id}
