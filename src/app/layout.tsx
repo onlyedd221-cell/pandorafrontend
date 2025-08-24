@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 export const metadata: Metadata = {
-  title: "Pandora Booking Site",
-  description: "Welcome to the Pandora Booking Site – Manage your bookings easily",
+  title: "Pandora Mistress Clubhouse",
+  description: "Welcome to the Pandora Mistress Clubhouse – Manage your bookings easily",
 };
 
 
