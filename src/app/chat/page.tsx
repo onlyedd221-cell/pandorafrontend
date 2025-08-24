@@ -13,12 +13,25 @@ interface Message {
 }
 
 export default function ChatPage() {
+  const getTime = () =>
+    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
   const [messages, setMessages] = useState<Message[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("chatMessages");
-      return saved ? JSON.parse(saved) : [];
+      if (saved) return JSON.parse(saved);
     }
-    return [];
+    // default welcome message
+    return [
+      {
+        id: 1,
+        from: "support",
+        type: "text",
+        content:
+          "👋 Welcome! How can we assist with your payments and bookings today?",
+        timestamp: getTime(),
+      },
+    ];
   });
 
   const [input, setInput] = useState("");
@@ -36,9 +49,6 @@ export default function ChatPage() {
       localStorage.setItem("chatMessages", JSON.stringify(messages));
     }
   }, [messages]);
-
-  const getTime = () =>
-    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const handleSend = () => {
     if (!input.trim() && !imagePreview) return;
@@ -85,12 +95,13 @@ export default function ChatPage() {
     <div className="font-sans text-white bg-black min-h-screen flex flex-col">
       <ChatHeader />
 
-      <main className="flex-1 flex flex-col w-full p-3 space-y-4 sm:max-w-4xl sm:mx-auto sm:p-4">
+      <main className="flex-1 flex flex-col w-full p-3 sm:max-w-4xl sm:mx-auto sm:p-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-pink-400 text-center mb-2">
           Support Chat
         </h1>
 
-        <div className="flex-1 bg-gray-900 rounded-xl p-3 sm:p-4 flex flex-col overflow-y-auto space-y-3 min-h-[50vh] max-h-[70vh]">
+        {/* Chat area pinned to bottom */}
+        <div className="flex-1 bg-gray-900 rounded-xl p-3 sm:p-4 flex flex-col overflow-y-auto space-y-3">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -102,13 +113,13 @@ export default function ChatPage() {
             >
               {msg.type === "text" ? (
                 <span>{msg.content}</span>
-              ) : msg.content ? (
+              ) : (
                 <img
                   src={msg.content}
                   alt="user-upload"
                   className="max-w-[150px] sm:max-w-[200px] max-h-[150px] rounded-lg object-cover"
                 />
-              ) : null}
+              )}
               <span className="absolute text-[10px] sm:text-xs text-gray-400 bottom-1 right-2">
                 {msg.timestamp}
               </span>
@@ -125,7 +136,8 @@ export default function ChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="flex gap-2 items-center flex-wrap sm:flex-nowrap">
+        {/* Input area */}
+        <div className="mt-3 flex gap-2 items-center flex-wrap sm:flex-nowrap">
           {imagePreview && (
             <div className="relative">
               <img
