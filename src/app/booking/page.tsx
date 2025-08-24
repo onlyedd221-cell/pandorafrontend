@@ -4,6 +4,7 @@ import { useState } from "react";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 import zelleLogo from "../../../public/logos/zelle.png";
 import cashAppLogo from "../../../public/logos/cashapp.png";
@@ -28,30 +29,22 @@ export default function BookingPage() {
     sessionType: "",
   });
 
-  const [toast, setToast] = useState(""); // Toast message state
-  const [showToast, setShowToast] = useState(false);
-
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  console.log("Booking Submitted:");
-  console.table(formData);
+    e.preventDefault();
+    console.log("Booking Submitted:");
+    console.table(formData);
 
-  // Show toast with support message
-  setToast(
-    "Booking submitted! Contact support for payment details."
-  );
-  setShowToast(true);
-
-  // Hide after 5 seconds
-  setTimeout(() => setShowToast(false), 5000);
-};
-
+    // ✅ Show toast instead of custom div
+    toast.success("Booking submitted! Contact support for payment details.");
+  };
 
   const rooms = ["Chinese Torture", "Classic Chamber", "VIP Room"];
   const sessionTypes = [
@@ -78,19 +71,27 @@ export default function BookingPage() {
       <main className="flex-1 px-4 sm:px-6 md:px-8 pt-32 pb-12 max-w-4xl mx-auto space-y-8">
         {/* Page Header */}
         <section className="text-center space-y-2">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">The Pandora Goddess Clubhouse</h1>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Book A Session</h2>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+            The Pandora Goddess Clubhouse
+          </h1>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">
+            Book A Session
+          </h2>
         </section>
 
         {/* Session Types */}
         <section className="space-y-2 text-center">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-yellow-400">Session Types</h3>
+          <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-yellow-400">
+            Session Types
+          </h3>
           <div className="flex flex-col items-center space-y-2">
             {sessionTypes.map((s) => (
               <button
                 key={s.value}
                 type="button"
-                onClick={() => setFormData({ ...formData, sessionType: s.value })}
+                onClick={() =>
+                  setFormData({ ...formData, sessionType: s.value })
+                }
                 className={`w-full sm:w-auto text-center px-4 py-2 rounded-lg font-semibold transition-colors ${
                   formData.sessionType === s.value
                     ? "text-white underline"
@@ -105,13 +106,17 @@ export default function BookingPage() {
 
         {/* Payment Methods */}
         <section className="space-y-2 text-center">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-green-400">Methods for Making Payment</h3>
+          <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-green-400">
+            Methods for Making Payment
+          </h3>
           <div className="flex flex-col items-center space-y-2 sm:space-y-0 sm:flex-row sm:flex-wrap sm:justify-center gap-2">
             {paymentMethods.map((p) => (
               <div
                 key={p.name}
                 className="flex items-center gap-2 justify-center text-green-400 px-3 py-1 rounded-lg hover:text-white transition-colors cursor-pointer"
-                onClick={() => setFormData({ ...formData, paymentMethod: p.name })}
+                onClick={() =>
+                  setFormData({ ...formData, paymentMethod: p.name })
+                }
               >
                 <Image src={p.logo} alt={p.name} width={24} height={24} />
                 <span className="text-sm sm:text-base">{p.name}</span>
@@ -122,7 +127,9 @@ export default function BookingPage() {
 
         {/* Reserve a Room Form */}
         <section className="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-4">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-2">Reserve a Room</h3>
+          <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-2">
+            Reserve a Room
+          </h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -214,15 +221,15 @@ export default function BookingPage() {
               Schedule Now
             </button>
           </form>
+
+          {/* 🔔 Support note */}
+          <p className="text-sm text-gray-400 mt-4 text-center">
+            After reserving a room, please contact{" "}
+            <span className="text-pink-400 font-semibold">support</span> to
+            finalize payment and details.
+          </p>
         </section>
       </main>
-
-      {/* Toast */}
-      {showToast && (
-        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-pink-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-          {toast}
-        </div>
-      )}
 
       {/* CHAT WIDGET */}
       <ChatWidget />

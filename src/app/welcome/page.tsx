@@ -315,9 +315,16 @@ export default function WelcomePage() {
           space for film and photo shoots, our rooms are available to meet your
           needs. Come and explore the extraordinary with us.
         </p>
-        <button className="bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded-lg font-semibold">
+        {/* <button className="bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded-lg font-semibold">
           Contact Us
-        </button>
+        </button> */}
+        <Link
+  href="/contact"
+  className="bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded-lg font-semibold"
+>
+  Contact Us
+</Link>
+
       </section>
 
       {/* BOOKINGS SECTION */}

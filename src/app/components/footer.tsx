@@ -1,16 +1,18 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [showToast, setShowToast] = useState(false);
 
   const handleSubscribe = () => {
-    if (!email) return; // simple validation
-    setShowToast(true);
+    if (!email) {
+      toast.error("Please enter your email first 📧");
+      return;
+    }
+    toast.success("Thank you for subscribing! 🎉");
     setEmail("");
-    setTimeout(() => setShowToast(false), 3000);
   };
 
   return (
@@ -19,6 +21,7 @@ export default function Footer() {
       className="bg-gradient-to-r from-gray-900 via-black to-gray-900 py-12 px-6 relative"
     >
       <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-12 text-center md:text-left">
+        {/* About */}
         <div>
           <h4 className="font-bold text-lg mb-4">About Us</h4>
           <p className="text-gray-400 text-sm">
@@ -26,20 +29,25 @@ export default function Footer() {
             elegant spaces and unforgettable encounters worldwide.
           </p>
         </div>
+
+        {/* Quick Links */}
         <div>
           <h4 className="font-bold text-lg mb-4">Quick Links</h4>
           <ul className="space-y-2 text-gray-400">
             <li><Link href="#about">About</Link></li>
             <li><Link href="#bookings">Bookings</Link></li>
-            {/* <li><Link href="#sessions">Sessions</Link></li> */}
             <li><Link href="#blog">Blog</Link></li>
           </ul>
         </div>
+
+        {/* Contact */}
         <div>
           <h4 className="font-bold text-lg mb-4">Contact</h4>
           <p className="text-gray-400 text-sm">info@bookingpro.com</p>
           <p className="text-gray-400 text-sm">+1 (555) 123-4567</p>
         </div>
+
+        {/* Newsletter */}
         <div>
           <h4 className="font-bold text-lg mb-4">Newsletter</h4>
           <input
@@ -51,19 +59,12 @@ export default function Footer() {
           />
           <button
             onClick={handleSubscribe}
-            className="bg-pink-500 hover:bg-pink-600 px-6 py-2 rounded-lg font-semibold w-full"
+            className="bg-pink-500 cursor-pointer hover:bg-pink-600 px-6 py-2 rounded-lg font-semibold w-full"
           >
             Subscribe
           </button>
         </div>
       </div>
-
-      {/* Toast */}
-      {showToast && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-pink-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-          Thank you for subscribing!
-        </div>
-      )}
 
       <p className="text-center text-gray-400 mt-10 text-sm">
         © {new Date().getFullYear()} BookingPro. All rights reserved.
