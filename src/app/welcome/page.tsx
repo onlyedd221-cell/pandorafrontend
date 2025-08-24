@@ -8,34 +8,202 @@ import Header from "../components/header";
 import { ChevronDown } from "lucide-react";
 
 // ----------------- BOOKINGS DATA -----------------
+// Bookings data with bio/description
 export const bookingsData = [
   {
     id: 23099302309,
     name: "Mistress Aurora",
     image: "/images/actress1.jpg",
     bio: "Experienced Domme with a passion for roleplay & guidance.",
+    description: `
+Aurora is the siren you’ve been searching for. She’ll captivate you with her charm, then command with precision. 
+Her sessions focus on personal transformation, trust, and pushing boundaries while ensuring safety and consent. 
+From classic discipline to immersive fantasy scenarios, Aurora’s presence leaves a lasting impression.
+`,
+    interests: [
+      "Bondage",
+      "Candle Wax",
+      "Chastity Devices",
+      "Clamps",
+      "Flogging",
+      "Foot Worship",
+      "Pantyhose/Stockings",
+      "Fetish",
+      "Sissification",
+      "Spanking/Paddling",
+      "Trampling",
+      "Whips",
+      "Sensory Deprivation",
+      "Roleplay",
+      "Tease & Denial",
+    ],
+    disclaimer:
+      "I only offer fetish, fantasy & role-play. No nudity or sexual services are provided. Illegal activities are strictly prohibited.",
+    profile: {
+      birthday: "Jan 15",
+      height: "5ft 6in",
+      shoeSize: "8",
+      hairColor: "Brunette",
+      eyeColor: "Brown",
+      availability: ["Incall", "Outcall", "Telephone"],
+      services: ["Dominant", "Submissive", "Switch", "Couples"],
+      ethnicity: ["Asian", "Latin"],
+      multilingual: true,
+      tattoos: true,
+      smoking: false,
+      wrestling: "Fantasy",
+      personality: "Confident, Playful, Precise",
+      favoriteTools: ["Whips", "Clamps", "Candle Wax"],
+    },
+    contactInfo: {
+      email: "aurora@example.com",
+      phone: "Available upon request",
+    },
   },
   {
     id: 23099302308,
     name: "Goddess Selene",
     image: "/images/actress2.jpg",
     bio: "Luxury Domme with tailored experiences.",
+    description: `
+Selene creates indulgent, immersive sessions that explore your deepest desires. 
+Her attention to detail ensures every session is unique, luxurious, and empowering. 
+She specializes in psychological play, fantasy fulfillment, and sensual domination.
+`,
+    interests: [
+      "Roleplay",
+      "Bondage",
+      "Luxury Sessions",
+      "Sensory Exploration",
+      "Foot Worship",
+      "Fetish",
+      "Domination",
+      "Submission",
+      "Tease & Denial",
+      "Spanking",
+      "Fantasy Scenarios",
+      "Power Exchange",
+    ],
+    disclaimer:
+      "Fetish & role-play only. No sexual services offered. Illegal activities are prohibited.",
+    profile: {
+      birthday: "Feb 20",
+      height: "5ft 8in",
+      shoeSize: "9",
+      hairColor: "Black",
+      eyeColor: "Hazel",
+      availability: ["Incall", "Outcall"],
+      services: ["Dominant", "Switch", "Couples"],
+      ethnicity: ["Caucasian", "Asian"],
+      multilingual: true,
+      tattoos: false,
+      smoking: true,
+      wrestling: "Fantasy",
+      personality: "Elegant, Assertive, Creative",
+      favoriteTools: ["Ropes", "Feathers", "Blindfolds"],
+    },
+    contactInfo: {
+      email: "selene@example.com",
+      phone: "Available upon request",
+    },
   },
   {
     id: 23099302307,
     name: "Domina Ivy",
     image: "/images/actress3.jpg",
     bio: "Discipline & transformative specialist.",
+    description: `
+Ivy is an expert in transformative domination and mind-body empowerment. 
+Her sessions combine discipline, roleplay, and psychological stimulation. 
+She challenges limits while nurturing trust and respect in every interaction.
+`,
+    interests: [
+      "Discipline",
+      "Transformation",
+      "Roleplay",
+      "Bondage",
+      "Sissification",
+      "Flogging",
+      "Foot Worship",
+      "Tease & Denial",
+      "Clamps",
+      "Candle Wax",
+      "Power Exchange",
+      "Fantasy Scenarios",
+      "Trampling",
+    ],
+    disclaimer:
+      "Fetish & fantasy role-play only. No sexual services or illegal activities.",
+    profile: {
+      birthday: "Mar 10",
+      height: "5ft 7in",
+      shoeSize: "8.5",
+      hairColor: "Red",
+      eyeColor: "Green",
+      availability: ["Incall", "Outcall", "Virtual"],
+      services: ["Dominant", "Submissive", "Switch"],
+      ethnicity: ["Mixed"],
+      multilingual: true,
+      tattoos: true,
+      smoking: false,
+      wrestling: "Fantasy",
+      personality: "Intense, Strategic, Caring",
+      favoriteTools: ["Whips", "Crops", "Blindfolds", "Ropes"],
+    },
+    contactInfo: {
+      email: "ivy@example.com",
+      phone: "Available upon request",
+    },
   },
   {
     id: 23099302306,
     name: "Madame Noir",
     image: "/images/actress4.jpg",
     bio: "Classic elegance with an edge.",
+    description: `
+Madame Noir exudes sophistication and command. Her sessions balance elegance with intensity, offering experiences ranging from sensory play to strict discipline. 
+She is versatile and highly skilled in tailoring sessions to her client’s desires.
+`,
+    interests: [
+      "Classic Domination",
+      "Roleplay",
+      "Bondage",
+      "Foot Worship",
+      "Sensory Play",
+      "Candle Wax",
+      "Fetish",
+      "Spanking",
+      "Trampling",
+      "Whips",
+      "Psychological Play",
+      "Power Exchange",
+    ],
+    disclaimer:
+      "Fetish & fantasy role-play only. No sexual services provided. Illegal activities are prohibited.",
+    profile: {
+      birthday: "Apr 5",
+      height: "5ft 9in",
+      shoeSize: "9",
+      hairColor: "Black",
+      eyeColor: "Blue",
+      availability: ["Incall", "Outcall"],
+      services: ["Dominant", "Switch", "Couples"],
+      ethnicity: ["Caucasian"],
+      multilingual: true,
+      tattoos: true,
+      smoking: true,
+      wrestling: "Fantasy",
+      personality: "Elegant, Commanding, Experienced",
+      favoriteTools: ["Whips", "Crops", "Chains"],
+    },
+    contactInfo: {
+      email: "noir@example.com",
+      phone: "Available upon request",
+    },
   },
 ];
 
-// ----------------- BLOG POSTS DATA -----------------
+// Blog posts data
 const blogPosts = [
   {
     id: 1,
@@ -43,8 +211,11 @@ const blogPosts = [
     image: "/images/actress5.jpg",
     excerpt:
       "Discover the empowering side of submission and how it can transform both body and mind.",
-    fullContent:
-      "Submission is often misunderstood, but it is a profound expression of trust, respect, and emotional exploration...",
+    fullContent: `Submission is often misunderstood, but it is a profound expression of trust, respect, and emotional exploration. When practiced consensually, it allows individuals to explore vulnerability, release control, and experience deep personal growth. 
+
+Through structured dynamics, communication, and attentive guidance, submission can enhance both emotional and physical awareness. It is not just about yielding to another, but about understanding oneself, establishing boundaries, and embracing the psychology of power exchange. 
+
+At Pandora’s Clubhouse, we provide an environment that is safe, respectful, and empowering, ensuring every session promotes trust, personal insight, and self-discovery. The art of submission becomes a journey, where mind, body, and spirit align in exploration and transformation.`,
   },
   {
     id: 2,
@@ -52,8 +223,11 @@ const blogPosts = [
     image: "/images/actress7.jpg",
     excerpt:
       "Take a peek into our world-class dungeon spaces, designed for ultimate creativity and exploration.",
-    fullContent:
-      "Our dungeons are meticulously designed to combine functionality, aesthetics, and safety...",
+    fullContent: `Our dungeons are meticulously designed to combine functionality, aesthetics, and safety. Each room offers a distinct ambiance, allowing for a wide range of experiences from sensory play to intricate roleplay scenarios. 
+
+We prioritize client comfort while enabling full creative freedom, so whether you're experimenting with bondage, power exchange, or fantasy enactments, the space supports your vision. Attention to lighting, sound, and equipment ensures each session feels immersive and authentic. 
+
+Beyond the physical setup, our approach emphasizes preparation, consent, and psychological safety. Clients are guided through experiences with clarity, boundaries are respected, and every detail contributes to a memorable and transformative session.`,
   },
   {
     id: 3,
@@ -61,10 +235,14 @@ const blogPosts = [
     image: "/images/bdsm3.jpg",
     excerpt:
       "Safety, consent, and trust are the pillars of everything we do at Pandora’s Clubhouse.",
-    fullContent:
-      "Safety and trust are the cornerstones of any meaningful BDSM experience...",
+    fullContent: `Safety and trust are the cornerstones of any meaningful BDSM experience. At Pandora’s Clubhouse, we uphold these values by ensuring every session begins with clear communication, established boundaries, and informed consent. 
+
+Practitioners and clients work together to create a mutually respectful environment, emphasizing emotional and physical safety at every step. Techniques are applied with precision and care, and tools are sanitized and used responsibly. 
+
+Trust builds over time and is nurtured through transparency, feedback, and mindful interaction. By fostering a culture where participants feel secure and valued, we enable authentic exploration of desires, fantasies, and personal growth within a structured and empowering framework.`,
   },
 ];
+
 
 // ----------------- MAIN PAGE -----------------
 export default function WelcomePage() {
@@ -79,12 +257,14 @@ export default function WelcomePage() {
   const [expandedBlog, setExpandedBlog] = useState<number | null>(null);
   const [activeBooking, setActiveBooking] = useState<number | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % heroImages.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
+ useEffect(() => {
+  const interval = setInterval(() => {
+    setCurrentImage((prev) => (prev + 1) % heroImages.length);
+  }, 6000);
+  return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
 
   // Scroll down button
   const handleScrollDown = () => {
