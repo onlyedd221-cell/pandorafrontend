@@ -85,18 +85,16 @@ export default function ChatPage() {
     <div className="font-sans text-white bg-black min-h-screen flex flex-col">
       <ChatHeader />
 
-      
-
-      <main className="flex-1 flex flex-col max-w-4xl mx-auto p-4 space-y-4">
-        <h1 className="text-3xl font-bold text-pink-400 text-center mb-2">
+      <main className="flex-1 flex flex-col w-full p-3 space-y-4 sm:max-w-4xl sm:mx-auto sm:p-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-pink-400 text-center mb-2">
           Support Chat
         </h1>
 
-        <div className="flex-1 bg-gray-900 rounded-xl p-4 flex flex-col overflow-y-auto space-y-3 h-[60vh]">
+        <div className="flex-1 bg-gray-900 rounded-xl p-3 sm:p-4 flex flex-col overflow-y-auto space-y-3 min-h-[50vh] max-h-[70vh]">
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`max-w-[75%] p-2 rounded-lg break-words relative ${
+              className={`max-w-[80%] p-2 sm:p-3 rounded-lg break-words relative text-sm sm:text-base ${
                 msg.from === "user"
                   ? "bg-pink-500 self-end text-white"
                   : "bg-gray-700 self-start text-gray-200"
@@ -108,17 +106,17 @@ export default function ChatPage() {
                 <img
                   src={msg.content}
                   alt="user-upload"
-                  className="max-w-48 max-h-48 rounded-lg object-cover"
+                  className="max-w-[150px] sm:max-w-[200px] max-h-[150px] rounded-lg object-cover"
                 />
               ) : null}
-              <span className="absolute text-xs text-gray-400 bottom-1 right-2">
+              <span className="absolute text-[10px] sm:text-xs text-gray-400 bottom-1 right-2">
                 {msg.timestamp}
               </span>
             </div>
           ))}
 
           {isTyping && (
-            <div className="flex items-center gap-2 self-start text-gray-400">
+            <div className="flex items-center gap-2 self-start text-gray-400 text-sm">
               <Loader2 className="animate-spin" size={16} />
               <span>Support is typing...</span>
             </div>
@@ -127,13 +125,13 @@ export default function ChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center flex-wrap sm:flex-nowrap">
           {imagePreview && (
             <div className="relative">
               <img
                 src={imagePreview}
                 alt="preview"
-                className="w-20 h-20 object-cover rounded-lg"
+                className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
               />
               <button
                 onClick={() => setImagePreview(null)}
@@ -148,14 +146,14 @@ export default function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none"
+            className="flex-1 px-3 py-2 rounded-lg bg-gray-800 text-white text-sm sm:text-base focus:outline-none"
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <label
             htmlFor="file-upload"
             className="bg-green-600 hover:bg-green-700 p-2 rounded-lg cursor-pointer flex items-center justify-center"
           >
-            <ImageIcon size={20} />
+            <ImageIcon size={18} />
           </label>
           <input
             id="file-upload"
@@ -166,9 +164,9 @@ export default function ChatPage() {
           />
           <button
             onClick={handleSend}
-            className="bg-pink-500 hover:bg-pink-600 px-4 py-2 rounded-lg flex items-center justify-center"
+            className="bg-pink-500 hover:bg-pink-600 px-3 sm:px-4 py-2 rounded-lg flex items-center justify-center"
           >
-            <Send size={20} />
+            <Send size={18} />
           </button>
         </div>
       </main>
@@ -181,8 +179,14 @@ export default function ChatPage() {
 
       <style jsx>{`
         @keyframes fade-in {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-fade-in {
           animation: fade-in 0.3s ease-out;

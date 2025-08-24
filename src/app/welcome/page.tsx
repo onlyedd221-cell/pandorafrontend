@@ -5,204 +5,37 @@ import Image from "next/image";
 import Link from "next/link";
 import Footer from "../components/footer";
 import Header from "../components/header";
-import ChatWidget from "../components/ChatWidget";
+import { ChevronDown } from "lucide-react";
 
-// Bookings data with bio/description
+// ----------------- BOOKINGS DATA -----------------
 export const bookingsData = [
   {
     id: 23099302309,
     name: "Mistress Aurora",
     image: "/images/actress1.jpg",
     bio: "Experienced Domme with a passion for roleplay & guidance.",
-    description: `
-Aurora is the siren you’ve been searching for. She’ll captivate you with her charm, then command with precision. 
-Her sessions focus on personal transformation, trust, and pushing boundaries while ensuring safety and consent. 
-From classic discipline to immersive fantasy scenarios, Aurora’s presence leaves a lasting impression.
-`,
-    interests: [
-      "Bondage",
-      "Candle Wax",
-      "Chastity Devices",
-      "Clamps",
-      "Flogging",
-      "Foot Worship",
-      "Pantyhose/Stockings",
-      "Fetish",
-      "Sissification",
-      "Spanking/Paddling",
-      "Trampling",
-      "Whips",
-      "Sensory Deprivation",
-      "Roleplay",
-      "Tease & Denial",
-    ],
-    disclaimer:
-      "I only offer fetish, fantasy & role-play. No nudity or sexual services are provided. Illegal activities are strictly prohibited.",
-    profile: {
-      birthday: "Jan 15",
-      height: "5ft 6in",
-      shoeSize: "8",
-      hairColor: "Brunette",
-      eyeColor: "Brown",
-      availability: ["Incall", "Outcall", "Telephone"],
-      services: ["Dominant", "Submissive", "Switch", "Couples"],
-      ethnicity: ["Asian", "Latin"],
-      multilingual: true,
-      tattoos: true,
-      smoking: false,
-      wrestling: "Fantasy",
-      personality: "Confident, Playful, Precise",
-      favoriteTools: ["Whips", "Clamps", "Candle Wax"],
-    },
-    contactInfo: {
-      email: "aurora@example.com",
-      phone: "Available upon request",
-    },
   },
   {
     id: 23099302308,
     name: "Goddess Selene",
     image: "/images/actress2.jpg",
     bio: "Luxury Domme with tailored experiences.",
-    description: `
-Selene creates indulgent, immersive sessions that explore your deepest desires. 
-Her attention to detail ensures every session is unique, luxurious, and empowering. 
-She specializes in psychological play, fantasy fulfillment, and sensual domination.
-`,
-    interests: [
-      "Roleplay",
-      "Bondage",
-      "Luxury Sessions",
-      "Sensory Exploration",
-      "Foot Worship",
-      "Fetish",
-      "Domination",
-      "Submission",
-      "Tease & Denial",
-      "Spanking",
-      "Fantasy Scenarios",
-      "Power Exchange",
-    ],
-    disclaimer:
-      "Fetish & role-play only. No sexual services offered. Illegal activities are prohibited.",
-    profile: {
-      birthday: "Feb 20",
-      height: "5ft 8in",
-      shoeSize: "9",
-      hairColor: "Black",
-      eyeColor: "Hazel",
-      availability: ["Incall", "Outcall"],
-      services: ["Dominant", "Switch", "Couples"],
-      ethnicity: ["Caucasian", "Asian"],
-      multilingual: true,
-      tattoos: false,
-      smoking: true,
-      wrestling: "Fantasy",
-      personality: "Elegant, Assertive, Creative",
-      favoriteTools: ["Ropes", "Feathers", "Blindfolds"],
-    },
-    contactInfo: {
-      email: "selene@example.com",
-      phone: "Available upon request",
-    },
   },
   {
     id: 23099302307,
     name: "Domina Ivy",
     image: "/images/actress3.jpg",
     bio: "Discipline & transformative specialist.",
-    description: `
-Ivy is an expert in transformative domination and mind-body empowerment. 
-Her sessions combine discipline, roleplay, and psychological stimulation. 
-She challenges limits while nurturing trust and respect in every interaction.
-`,
-    interests: [
-      "Discipline",
-      "Transformation",
-      "Roleplay",
-      "Bondage",
-      "Sissification",
-      "Flogging",
-      "Foot Worship",
-      "Tease & Denial",
-      "Clamps",
-      "Candle Wax",
-      "Power Exchange",
-      "Fantasy Scenarios",
-      "Trampling",
-    ],
-    disclaimer:
-      "Fetish & fantasy role-play only. No sexual services or illegal activities.",
-    profile: {
-      birthday: "Mar 10",
-      height: "5ft 7in",
-      shoeSize: "8.5",
-      hairColor: "Red",
-      eyeColor: "Green",
-      availability: ["Incall", "Outcall", "Virtual"],
-      services: ["Dominant", "Submissive", "Switch"],
-      ethnicity: ["Mixed"],
-      multilingual: true,
-      tattoos: true,
-      smoking: false,
-      wrestling: "Fantasy",
-      personality: "Intense, Strategic, Caring",
-      favoriteTools: ["Whips", "Crops", "Blindfolds", "Ropes"],
-    },
-    contactInfo: {
-      email: "ivy@example.com",
-      phone: "Available upon request",
-    },
   },
   {
     id: 23099302306,
     name: "Madame Noir",
     image: "/images/actress4.jpg",
     bio: "Classic elegance with an edge.",
-    description: `
-Madame Noir exudes sophistication and command. Her sessions balance elegance with intensity, offering experiences ranging from sensory play to strict discipline. 
-She is versatile and highly skilled in tailoring sessions to her client’s desires.
-`,
-    interests: [
-      "Classic Domination",
-      "Roleplay",
-      "Bondage",
-      "Foot Worship",
-      "Sensory Play",
-      "Candle Wax",
-      "Fetish",
-      "Spanking",
-      "Trampling",
-      "Whips",
-      "Psychological Play",
-      "Power Exchange",
-    ],
-    disclaimer:
-      "Fetish & fantasy role-play only. No sexual services provided. Illegal activities are prohibited.",
-    profile: {
-      birthday: "Apr 5",
-      height: "5ft 9in",
-      shoeSize: "9",
-      hairColor: "Black",
-      eyeColor: "Blue",
-      availability: ["Incall", "Outcall"],
-      services: ["Dominant", "Switch", "Couples"],
-      ethnicity: ["Caucasian"],
-      multilingual: true,
-      tattoos: true,
-      smoking: true,
-      wrestling: "Fantasy",
-      personality: "Elegant, Commanding, Experienced",
-      favoriteTools: ["Whips", "Crops", "Chains"],
-    },
-    contactInfo: {
-      email: "noir@example.com",
-      phone: "Available upon request",
-    },
   },
 ];
 
-// Blog posts data
+// ----------------- BLOG POSTS DATA -----------------
 const blogPosts = [
   {
     id: 1,
@@ -210,11 +43,8 @@ const blogPosts = [
     image: "/images/actress5.jpg",
     excerpt:
       "Discover the empowering side of submission and how it can transform both body and mind.",
-    fullContent: `Submission is often misunderstood, but it is a profound expression of trust, respect, and emotional exploration. When practiced consensually, it allows individuals to explore vulnerability, release control, and experience deep personal growth. 
-
-Through structured dynamics, communication, and attentive guidance, submission can enhance both emotional and physical awareness. It is not just about yielding to another, but about understanding oneself, establishing boundaries, and embracing the psychology of power exchange. 
-
-At Pandora’s Clubhouse, we provide an environment that is safe, respectful, and empowering, ensuring every session promotes trust, personal insight, and self-discovery. The art of submission becomes a journey, where mind, body, and spirit align in exploration and transformation.`,
+    fullContent:
+      "Submission is often misunderstood, but it is a profound expression of trust, respect, and emotional exploration...",
   },
   {
     id: 2,
@@ -222,11 +52,8 @@ At Pandora’s Clubhouse, we provide an environment that is safe, respectful, an
     image: "/images/actress7.jpg",
     excerpt:
       "Take a peek into our world-class dungeon spaces, designed for ultimate creativity and exploration.",
-    fullContent: `Our dungeons are meticulously designed to combine functionality, aesthetics, and safety. Each room offers a distinct ambiance, allowing for a wide range of experiences from sensory play to intricate roleplay scenarios. 
-
-We prioritize client comfort while enabling full creative freedom, so whether you're experimenting with bondage, power exchange, or fantasy enactments, the space supports your vision. Attention to lighting, sound, and equipment ensures each session feels immersive and authentic. 
-
-Beyond the physical setup, our approach emphasizes preparation, consent, and psychological safety. Clients are guided through experiences with clarity, boundaries are respected, and every detail contributes to a memorable and transformative session.`,
+    fullContent:
+      "Our dungeons are meticulously designed to combine functionality, aesthetics, and safety...",
   },
   {
     id: 3,
@@ -234,27 +61,23 @@ Beyond the physical setup, our approach emphasizes preparation, consent, and psy
     image: "/images/bdsm3.jpg",
     excerpt:
       "Safety, consent, and trust are the pillars of everything we do at Pandora’s Clubhouse.",
-    fullContent: `Safety and trust are the cornerstones of any meaningful BDSM experience. At Pandora’s Clubhouse, we uphold these values by ensuring every session begins with clear communication, established boundaries, and informed consent. 
-
-Practitioners and clients work together to create a mutually respectful environment, emphasizing emotional and physical safety at every step. Techniques are applied with precision and care, and tools are sanitized and used responsibly. 
-
-Trust builds over time and is nurtured through transparency, feedback, and mindful interaction. By fostering a culture where participants feel secure and valued, we enable authentic exploration of desires, fantasies, and personal growth within a structured and empowering framework.`,
+    fullContent:
+      "Safety and trust are the cornerstones of any meaningful BDSM experience...",
   },
 ];
 
+// ----------------- MAIN PAGE -----------------
 export default function WelcomePage() {
-const heroImages = [
-  "/images/bdsm1.jpg", // Leather texture
-  "/images/bdsm2.jpg", // Rope pattern
-  "/images/bdsm3.jpg", // Moody lighting
-  "/images/bdsm4.jpg", // Abstract art
-];
-
+  const heroImages = [
+    "/images/bdsm1.jpg",
+    "/images/bdsm2.jpg",
+    "/images/bdsm3.jpg",
+    "/images/bdsm4.jpg",
+  ];
 
   const [currentImage, setCurrentImage] = useState(0);
-  const [activeBooking, setActiveBooking] = useState<number | null>(null);
-  //   const [activeBlog, setActiveBlog] = useState<number | null>(null);
   const [expandedBlog, setExpandedBlog] = useState<number | null>(null);
+  const [activeBooking, setActiveBooking] = useState<number | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -263,6 +86,11 @@ const heroImages = [
     return () => clearInterval(interval);
   }, []);
 
+  // Scroll down button
+  const handleScrollDown = () => {
+    window.scrollBy({ top: 600, behavior: "smooth" });
+  };
+
   return (
     <div className="font-sans text-white relative">
       <Header />
@@ -270,7 +98,7 @@ const heroImages = [
       {/* HERO SECTION */}
       <section className="relative h-screen flex flex-col justify-center items-center text-center px-4">
         <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-100"
+          className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
           style={{ backgroundImage: `url(${heroImages[currentImage]})` }}
         />
         <div className="absolute inset-0 bg-black/70" />
@@ -343,7 +171,7 @@ const heroImages = [
                 <h4 className="text-xl font-bold mb-2">{b.name}</h4>
                 <p className="text-gray-300 mb-4 text-sm">{b.bio}</p>
                 <Link
-                  href={`/profile/${b.id}`} // Dynamic route
+                  href={`/profile/${b.id}`}
                   className="bg-pink-500 hover:bg-pink-600 px-4 py-2 rounded-lg font-semibold"
                 >
                   View Profile
@@ -378,7 +206,9 @@ const heroImages = [
               <div className="p-6">
                 <h4 className="text-xl font-semibold mb-3">{post.title}</h4>
                 <p className="text-gray-300 mb-4 text-sm whitespace-pre-line">
-                  {expandedBlog === post.id ? post.fullContent : post.excerpt}
+                  {expandedBlog === post.id
+                    ? post.fullContent
+                    : post.excerpt}
                 </p>
                 <button
                   onClick={() =>
@@ -394,9 +224,15 @@ const heroImages = [
         </div>
       </section>
 
-      {/* <ChatWidget /> */}
-
       <Footer />
+
+      {/* Floating Scroll Button */}
+      <button
+        onClick={handleScrollDown}
+        className="fixed bottom-6 right-6 bg-pink-500 hover:bg-pink-600 text-white p-3 rounded-full shadow-lg z-50"
+      >
+        <ChevronDown size={24} />
+      </button>
     </div>
   );
 }
