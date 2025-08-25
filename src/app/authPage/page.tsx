@@ -36,7 +36,7 @@ export default function AuthPage() {
     }
 
     try {
-      const { data } = await registerUser({ variables: { name, email, password } });
+      await registerUser({ variables: { name, email, password } });
       toast.success("OTP sent to your email. Please verify!");
       setView("otp"); // switch to OTP input
     } catch (err: any) {
@@ -57,8 +57,10 @@ export default function AuthPage() {
     try {
       const { data } = await verifyOTP({ variables: { email, otp } });
 
-      localStorage.setItem("token", data.verifyOTP.token);
-      localStorage.setItem("user", JSON.stringify(data.verifyOTP.user));
+      const verifyData = data as { verifyOTP: { token: string; user: any } };
+
+      localStorage.setItem("token", verifyData.verifyOTP.token);
+      localStorage.setItem("user", JSON.stringify(verifyData.verifyOTP.user));
 
       toast.success("OTP verified! Welcome 🎉");
       router.push("/booking");
@@ -80,8 +82,10 @@ export default function AuthPage() {
     try {
       const { data } = await loginUser({ variables: { email, password } });
 
-      localStorage.setItem("token", data.login.token);
-      localStorage.setItem("user", JSON.stringify(data.login.user));
+      const loginData = data as { login: { token: string; user: any } };
+
+      localStorage.setItem("token", loginData.login.token);
+      localStorage.setItem("user", JSON.stringify(loginData.login.user));
 
       toast.success("Login successful 🎉");
       router.push("/booking");

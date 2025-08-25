@@ -25,7 +25,13 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [signOutMutation] = useMutation(SIGN_OUT);
+  interface SignOutData {
+    signOut: {
+      message: string;
+    };
+  }
+  
+  const [signOutMutation] = useMutation<SignOutData>(SIGN_OUT);
 
   useEffect(() => {
     if (typeof window !== "undefined") {

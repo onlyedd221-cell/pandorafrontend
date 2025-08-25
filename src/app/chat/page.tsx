@@ -36,7 +36,10 @@ export default function UserChatPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("user");
-      if (!stored) return (window.location.href = "/authPage");
+      if (!stored) {
+        window.location.href = "/authPage";
+        return;
+      }
       const u = JSON.parse(stored);
       setUser(u);
 
@@ -47,11 +50,11 @@ export default function UserChatPage() {
     }
   }, []);
 
-  const { data: allChatsData, refetch: refetchChats } = useQuery(GET_ALL_CHATS, {
+  const { data: allChatsData, refetch: refetchChats } = useQuery<{ getAllChats: { id: string; name: string }[] }>(GET_ALL_CHATS, {
     skip: !user || user.email !== ADMIN_EMAIL,
   });
 
-  const { data: messagesData, refetch: refetchMessages } = useQuery(GET_MESSAGES, {
+  const { data: messagesData, refetch: refetchMessages } = useQuery<{ getMessages: Message[] }>(GET_MESSAGES, {
     variables: { chatId },
     skip: !chatId,
     pollInterval: 2000,
