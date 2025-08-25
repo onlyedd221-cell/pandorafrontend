@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
