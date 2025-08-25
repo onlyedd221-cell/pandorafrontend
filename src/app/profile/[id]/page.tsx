@@ -1,17 +1,29 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { bookingsData } from "@/app/welcome/page";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
   const { id } = useParams();
+  const router = useRouter();
   const profileId = Number(id);
 
   const profile = bookingsData.find((b) => b.id === profileId);
+  const [user, setUser] = useState<any>(null);
+
+  // Load user from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   if (!profile) {
     return (
@@ -26,18 +38,27 @@ export default function ProfilePage() {
     );
   }
 
+  // Handle Book a Session click
+  const handleBookSession = () => {
+    if (!user) {
+      toast.error("You must be signed in to book a session.");
+      router.push("/authPage");
+      return;
+    }
+    router.push("/booking");
+  };
+
   return (
     <div className="font-sans text-white bg-gray-900 relative">
       <Header />
       <div className="mb-7 p-8"></div>
 
       {/* Back Button */}
-      <div className="absolute  p-4   mt-96 left-4 z-50">
+      <div className="absolute p-4 mt-96 left-4 z-50">
         <Link
           href="/"
           className="flex items-center gap-2 text-pink-400 hover:text-pink-500 font-semibold"
         >
-          {/* You can replace this with an SVG arrow if you like */}
           <span className="text-2xl">←</span> Back
         </Link>
       </div>
@@ -98,12 +119,12 @@ export default function ProfilePage() {
             </p>
           </div>
 
-          <Link
-            href="/booking"
+          <button
+            onClick={handleBookSession}
             className="inline-block mt-4 bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded-lg font-semibold"
           >
             Book a Session
-          </Link>
+          </button>
         </div>
       </section>
 

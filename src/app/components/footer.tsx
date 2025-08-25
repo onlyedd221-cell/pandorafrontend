@@ -43,8 +43,8 @@ export default function Footer() {
         {/* Contact */}
         <div>
           <h4 className="font-bold text-lg mb-4">Contact</h4>
-          <p className="text-gray-400 text-sm">info@bookingpro.com</p>
-          <p className="text-gray-400 text-sm">+1 (555) 123-4567</p>
+          <p className="text-gray-400 text-sm">pandorabookings@gmail.com</p>
+          {/* <p className="text-gray-400 text-sm">+1 (555) 123-4567</p> */}
         </div>
 
         {/* Newsletter */}

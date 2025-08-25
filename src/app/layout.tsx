@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-
+import ApolloProviderWrapper from "./components/ApolloProviderWrapper";
+// import ApolloProviderWrapper from "./components/ApolloProviderWrapper";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+    <ApolloProviderWrapper>
+       {children}
+      </ApolloProviderWrapper>   
         {/* Toast notification container */}
         <Toaster position="top-right" reverseOrder={false} />
       </body>

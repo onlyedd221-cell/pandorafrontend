@@ -292,10 +292,10 @@ export default function WelcomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/booking"
+              href="/authPage"
               className="bg-pink-500 hover:bg-pink-600 px-6 py-4 rounded-lg font-semibold"
             >
-              Book a Session
+             Get Started
             </Link>
           </div>
         </div>
