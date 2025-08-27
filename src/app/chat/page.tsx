@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useEffect, useRef } from "react";
-import { Send, FileText, ArrowLeft } from "lucide-react";
+import { Send, FileText, ArrowLeft, ArrowDownCircle } from "lucide-react";
 import ChatHeader from "../components/chatHeader";
 import Header from "../components/header";
 import { useMutation, useQuery } from "@apollo/client/react";
@@ -31,7 +31,10 @@ export default function UserChatPage() {
   const [chatId, setChatId] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [selectedChat, setSelectedChat] = useState<{ id: string; name: string } | null>(null);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -50,9 +53,10 @@ export default function UserChatPage() {
     }
   }, []);
 
-  const { data: allChatsData, refetch: refetchChats } = useQuery<{ getAllChats: { id: string; name: string }[] }>(GET_ALL_CHATS, {
-    skip: !user || user.email !== ADMIN_EMAIL,
-  });
+  const { data: allChatsData, refetch: refetchChats } = useQuery<{ getAllChats: { id: string; name: string }[] }>(
+    GET_ALL_CHATS,
+    { skip: !user || user.email !== ADMIN_EMAIL }
+  );
 
   const { data: messagesData, refetch: refetchMessages } = useQuery<{ getMessages: Message[] }>(GET_MESSAGES, {
     variables: { chatId },
@@ -65,12 +69,36 @@ export default function UserChatPage() {
       setInput("");
       setFile(null);
       refetchMessages();
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     },
     onError: (err) => {
       console.error("Send message error:", err);
     },
   });
+
+  // Scroll handling
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+      setShowScrollButton(!isAtBottom);
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Auto scroll on new messages only if already at bottom
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+    if (isAtBottom) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messagesData]);
 
   const handleSend = async () => {
     if (!input.trim() && !file) return;
@@ -131,13 +159,27 @@ export default function UserChatPage() {
       </div>
     );
   }
+// Always show support welcome message first
+const messages: Message[] =
+  messagesData?.getMessages && messagesData.getMessages.length > 0
+    ? messagesData.getMessages
+    : [
+        {
+          id: "welcome",
+          chatId,
+          from: "admin",
+          type: "text",
+          content:
+            "👋 Welcome to Support. A representative will be with you shortly. Please feel free to share details about your booking or payment inquiry.",
+          timestamp: Date.now().toString(),
+        },
+      ];
 
-  const messages: Message[] = messagesData?.getMessages || [];
 
   return (
     <div className="font-sans text-white bg-black min-h-screen flex flex-col">
       <ChatHeader />
-      <main className="flex-1 flex flex-col w-full p-3 sm:max-w-4xl sm:mx-auto sm:p-4">
+      <main className="flex-1 flex flex-col w-full p-3 sm:max-w-4xl sm:mx-auto sm:p-4 relative">
         <div className="flex justify-between items-center mb-2">
           {user.email === ADMIN_EMAIL && (
             <button
@@ -156,8 +198,11 @@ export default function UserChatPage() {
           </h1>
         </div>
 
-        <div className="flex-1 bg-gray-900 rounded-xl p-4 flex flex-col overflow-y-auto space-y-3">
-          {messages.map(msg => (
+        <div
+          ref={messagesContainerRef}
+          className="flex-1 bg-gray-900 rounded-xl p-4 flex flex-col overflow-y-auto space-y-3"
+        >
+          {messages.map((msg) => (
             <div
               key={msg.id}
               className={`max-w-[80%] p-3 rounded-xl break-words relative text-sm sm:text-base shadow-md ${
@@ -176,6 +221,16 @@ export default function UserChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Scroll to bottom button */}
+        {showScrollButton && (
+          <button
+            onClick={() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })}
+            className="absolute bottom-28 right-6 bg-pink-500 hover:bg-pink-600 p-2 rounded-full shadow-lg"
+          >
+            <ArrowDownCircle size={22} />
+          </button>
+        )}
+
         <div className="mt-3 flex gap-2 items-center flex-wrap sm:flex-nowrap">
           {file && (
             <div className="relative">
@@ -192,10 +247,10 @@ export default function UserChatPage() {
           <input
             type="text"
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             className="flex-1 px-3 py-2 rounded-lg bg-gray-800 text-white text-sm sm:text-base focus:outline-none"
-            onKeyDown={e => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
 
           <label

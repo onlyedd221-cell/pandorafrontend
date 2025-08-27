@@ -2,28 +2,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState } from "react";
-// import { useMutation /} from "@apollo/client";
 import { useRouter } from "next/navigation";
 import Header from "../components/header";
-// import { REGISTER_USER, VERIFY_OTP, LOGIN_USER } from "../graphql/mutations/auth";
 import { toast } from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
 import { useMutation } from "@apollo/client/react";
-import { REGISTER_USER ,VERIFY_OTP,LOGIN_USER} from "../graphql/mutations";
+import { REGISTER_USER, LOGIN_USER } from "../graphql/mutations";
 
 export default function AuthPage() {
-  const [view, setView] = useState<"login" | "register" | "otp">("login");
+  const [view, setView] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
   const [registerUser] = useMutation(REGISTER_USER);
-  const [verifyOTP] = useMutation(VERIFY_OTP);
   const [loginUser] = useMutation(LOGIN_USER);
 
   // Register
@@ -36,33 +32,13 @@ export default function AuthPage() {
     }
 
     try {
-      await registerUser({ variables: { name, email, password } });
-      toast.success("OTP sent to your email. Please verify!");
-      setView("otp"); // switch to OTP input
-    } catch (err: any) {
-      setError(err.message);
-      toast.error(err.message);
-    }
-  };
+      const { data } = await registerUser({ variables: { name, email, password } });
+      const registerData = data as { register: { token: string; user: any } };
 
-  // Verify OTP
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    if (!otp) {
-      toast.error("Enter the OTP sent to your email.");
-      return setError("Enter the OTP sent to your email.");
-    }
+      localStorage.setItem("token", registerData.register.token);
+      localStorage.setItem("user", JSON.stringify(registerData.register.user));
 
-    try {
-      const { data } = await verifyOTP({ variables: { email, otp } });
-
-      const verifyData = data as { verifyOTP: { token: string; user: any } };
-
-      localStorage.setItem("token", verifyData.verifyOTP.token);
-      localStorage.setItem("user", JSON.stringify(verifyData.verifyOTP.user));
-
-      toast.success("OTP verified! Welcome 🎉");
+      toast.success("Registration successful 🎉");
       router.push("/booking");
     } catch (err: any) {
       setError(err.message);
@@ -81,7 +57,6 @@ export default function AuthPage() {
 
     try {
       const { data } = await loginUser({ variables: { email, password } });
-
       const loginData = data as { login: { token: string; user: any } };
 
       localStorage.setItem("token", loginData.login.token);
@@ -102,7 +77,6 @@ export default function AuthPage() {
         <h2 className="text-2xl font-bold text-pink-400 mb-4">
           {view === "login" && "Login"}
           {view === "register" && "Register"}
-          {view === "otp" && "Verify OTP"}
         </h2>
 
         {/* REGISTER */}
@@ -123,7 +97,7 @@ export default function AuthPage() {
               className="w-full px-4 py-2 rounded-lg bg-black text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
             />
 
-            {/* Password with visibility toggle */}
+            {/* Password with toggle */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -147,26 +121,6 @@ export default function AuthPage() {
               className="w-full bg-pink-500 hover:bg-pink-600 transition px-4 py-2 rounded-lg font-semibold"
             >
               Register
-            </button>
-          </form>
-        )}
-
-        {/* OTP VERIFY */}
-        {view === "otp" && (
-          <form onSubmit={handleVerifyOTP} className="space-y-4">
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg bg-black text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
-            />
-            {error && <p className="text-red-400 text-sm">{error}</p>}
-            <button
-              type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 transition px-4 py-2 rounded-lg font-semibold"
-            >
-              Verify OTP
             </button>
           </form>
         )}
@@ -211,20 +165,18 @@ export default function AuthPage() {
         )}
 
         {/* Switch link */}
-        {view !== "otp" && (
-          <p className="text-gray-400 text-sm mt-4">
-            {view === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
-            <button
-              className="text-pink-400 font-semibold hover:underline"
-              onClick={() => {
-                setError("");
-                setView(view === "login" ? "register" : "login");
-              }}
-            >
-              {view === "login" ? "Register" : "Login"}
-            </button>
-          </p>
-        )}
+        <p className="text-gray-400 text-sm mt-4">
+          {view === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
+          <button
+            className="text-pink-400 font-semibold hover:underline"
+            onClick={() => {
+              setError("");
+              setView(view === "login" ? "register" : "login");
+            }}
+          >
+            {view === "login" ? "Register" : "Login"}
+          </button>
+        </p>
       </div>
     </div>
   );

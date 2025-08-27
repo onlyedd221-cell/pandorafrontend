@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 export default function ProfilePage() {
   const { id } = useParams();
   const router = useRouter();
-  const profileId = Number(id);
+  const profileId = String(id);
 
-  const profile = bookingsData.find((b) => b.id === profileId);
+  const profile = bookingsData.find((b) => String(b.id) === profileId);
   const [user, setUser] = useState<any>(null);
 
   // Load user from localStorage
@@ -25,6 +25,7 @@ export default function ProfilePage() {
       if (storedUser) setUser(JSON.parse(storedUser));
     }
   }, []);
+
 
   if (!profile) {
     return (
