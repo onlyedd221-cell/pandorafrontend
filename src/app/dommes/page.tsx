@@ -6,9 +6,10 @@ import Link from "next/link";
 import Footer from "../components/footer";
 import Header from "../components/header";
 // booking data array
+// Bookings data with bio/description
 export const bookingsData = [
   {
-    id: 23099302301,
+    id: 23099302309,
     name: "Mistress Aurora",
     image: "/images/actress1.jpg",
     bio: "Experienced Domme with a passion for roleplay & guidance.",
@@ -53,14 +54,14 @@ From classic discipline to immersive fantasy scenarios, Aurora’s presence leav
       favoriteTools: ["Whips", "Clamps", "Candle Wax"],
     },
     contactInfo: {
-      email: "aurora@example.com",
+      email: "mistress.aurora01@gmail.com",
       phone: "Available upon request",
     },
   },
   {
-    id: 23099302302,
+    id: 23099302308,
     name: "Goddess Selene",
-    image: "/images/dommes5.jpeg",
+    image: "/images/actress2.jpg",
     bio: "Luxury Domme with tailored experiences.",
     description: `
 Selene creates indulgent, immersive sessions that explore your deepest desires. 
@@ -100,12 +101,12 @@ She specializes in psychological play, fantasy fulfillment, and sensual dominati
       favoriteTools: ["Ropes", "Feathers", "Blindfolds"],
     },
     contactInfo: {
-      email: "selene@example.com",
+      email: "goddess.selene@yahoo.com",
       phone: "Available upon request",
     },
   },
   {
-    id: 23099302303,
+    id: 23099302307,
     name: "Domina Ivy",
     image: "/images/actress3.jpg",
     bio: "Discipline & transformative specialist.",
@@ -148,302 +149,224 @@ She challenges limits while nurturing trust and respect in every interaction.
       favoriteTools: ["Whips", "Crops", "Blindfolds", "Ropes"],
     },
     contactInfo: {
-      email: "ivy@example.com",
-      phone: "Available upon request",
-    },
-  },
-  {
-    id: 23099302304,
-    name: "Lady Seraphina",
-    image: "/images/actress4.jpg",
-    bio: "Graceful and powerful — your celestial Domme.",
-    description: `
-Seraphina blends elegance with authority. 
-Her presence is magnetic, her methods a mix of strictness and compassion. 
-Expect a divine experience that takes you on a journey of self-discovery.
-`,
-    interests: [
-      "Spiritual Domination",
-      "Bondage",
-      "Sensory Play",
-      "Foot Worship",
-      "Roleplay",
-      "Tease & Denial",
-      "Impact Play",
-      "Whips",
-      "Crops",
-    ],
-    disclaimer:
-      "Fetish only. No nudity or illegal services are part of my offerings.",
-    profile: {
-      birthday: "Apr 12",
-      height: "5ft 9in",
-      shoeSize: "10",
-      hairColor: "Blonde",
-      eyeColor: "Blue",
-      availability: ["Incall", "Outcall"],
-      services: ["Dominant", "Switch"],
-      ethnicity: ["Caucasian"],
-      multilingual: false,
-      tattoos: false,
-      smoking: false,
-      wrestling: "Fantasy",
-      personality: "Calm, Assertive, Spiritual",
-      favoriteTools: ["Feathers", "Ropes", "Crops"],
-    },
-    contactInfo: {
-      email: "seraphina@example.com",
-      phone: "Available upon request",
-    },
-  },
-  {
-    id: 23099302305,
-    name: "Mistress Valeria",
-    image: "/images/actress5.jpg",
-    bio: "Sharp, intense, and unforgettable.",
-    description: `
-Valeria thrives on intensity. 
-Her sessions are built to challenge limits and fuel transformation. 
-A perfect guide for those seeking depth and intensity in their experiences.
-`,
-    interests: [
-      "Discipline",
-      "Roleplay",
-      "Bondage",
-      "Candle Wax",
-      "Clamps",
-      "Tease & Denial",
-      "Sissification",
-    ],
-    disclaimer:
-      "Fetish, fantasy & role-play only. No sexual services provided.",
-    profile: {
-      birthday: "May 8",
-      height: "5ft 5in",
-      shoeSize: "7",
-      hairColor: "Black",
-      eyeColor: "Brown",
-      availability: ["Incall"],
-      services: ["Dominant"],
-      ethnicity: ["Hispanic"],
-      multilingual: true,
-      tattoos: true,
-      smoking: true,
-      wrestling: "Fantasy",
-      personality: "Fiery, Bold, Unforgiving",
-      favoriteTools: ["Whips", "Chains", "Clamps"],
-    },
-    contactInfo: {
-      email: "valeria@example.com",
+      email: "domina.ivy@hotmail.com",
       phone: "Available upon request",
     },
   },
   {
     id: 23099302306,
-    name: "Empress Nyx",
-    image: "/images/actress6.jpg",
-    bio: "Dark, mysterious, and commanding.",
+    name: "Madame Noir",
+    image: "/images/actress4.jpg",
+    bio: "Classic elegance with an edge.",
     description: `
-Nyx embodies the night — alluring, mysterious, and powerful. 
-Her energy creates transformative, shadow-filled sessions. 
-Expect intensity and allure woven into every moment.
+Madame Noir exudes sophistication and command. Her sessions balance elegance with intensity, offering experiences ranging from sensory play to strict discipline. 
+She is versatile and highly skilled in tailoring sessions to her client’s desires.
 `,
     interests: [
+      "Classic Domination",
+      "Roleplay",
       "Bondage",
-      "Dark Roleplay",
-      "Sensory Deprivation",
-      "Impact Play",
-      "Whips",
+      "Foot Worship",
+      "Sensory Play",
       "Candle Wax",
+      "Fetish",
+      "Spanking",
+      "Trampling",
+      "Whips",
+      "Psychological Play",
+      "Power Exchange",
     ],
     disclaimer:
-      "Only fetish and fantasy play. No sexual services.",
+      "Fetish & fantasy role-play only. No sexual services provided. Illegal activities are prohibited.",
     profile: {
-      birthday: "Jun 21",
-      height: "5ft 10in",
+      birthday: "Apr 5",
+      height: "5ft 9in",
       shoeSize: "9",
       hairColor: "Black",
-      eyeColor: "Grey",
-      availability: ["Incall", "Outcall"],
-      services: ["Dominant"],
-      ethnicity: ["Mixed"],
-      multilingual: false,
-      tattoos: true,
-      smoking: false,
-      wrestling: "Fantasy",
-      personality: "Mysterious, Intense, Magnetic",
-      favoriteTools: ["Whips", "Chains", "Blindfolds"],
-    },
-    contactInfo: {
-      email: "nyx@example.com",
-      phone: "Available upon request",
-    },
-  },
-  {
-    id: 23099302307,
-    name: "Madame Celeste",
-    image: "/images/actress7.jpg",
-    bio: "Elegant & refined domination.",
-    description: `
-Celeste combines elegance with precision. 
-She’s refined, graceful, and deeply aware of power exchange. 
-Her sessions leave you both grounded and elevated.
-`,
-    interests: [
-      "Bondage",
-      "Roleplay",
-      "Spanking",
-      "Tease & Denial",
-      "Fetish",
-      "Sensory Exploration",
-    ],
-    disclaimer:
-      "Fetish role-play only. No illegal services.",
-    profile: {
-      birthday: "Jul 14",
-      height: "5ft 6in",
-      shoeSize: "8",
-      hairColor: "Brown",
       eyeColor: "Blue",
-      availability: ["Incall"],
-      services: ["Dominant", "Switch"],
+      availability: ["Incall", "Outcall"],
+      services: ["Dominant", "Switch", "Couples"],
       ethnicity: ["Caucasian"],
       multilingual: true,
-      tattoos: false,
-      smoking: false,
-      wrestling: "Fantasy",
-      personality: "Graceful, Calm, Commanding",
-      favoriteTools: ["Ropes", "Whips", "Feathers"],
-    },
-    contactInfo: {
-      email: "celeste@example.com",
-      phone: "Available upon request",
-    },
-  },
-  {
-    id: 23099302308,
-    name: "Mistress Raven",
-    image: "/images/actress8.jpg",
-    bio: "Wild, dark, and fiery energy.",
-    description: `
-Raven embodies freedom and fire. 
-Her sessions are raw, intense, and liberating. 
-Perfect for those who want to explore their primal instincts.
-`,
-    interests: [
-      "Bondage",
-      "Whips",
-      "Candle Wax",
-      "Clamps",
-      "Spanking",
-      "Roleplay",
-      "Flogging",
-    ],
-    disclaimer:
-      "Fetish play only. No sexual services.",
-    profile: {
-      birthday: "Aug 5",
-      height: "5ft 7in",
-      shoeSize: "9",
-      hairColor: "Black",
-      eyeColor: "Hazel",
-      availability: ["Outcall"],
-      services: ["Dominant"],
-      ethnicity: ["Mixed"],
-      multilingual: false,
       tattoos: true,
       smoking: true,
       wrestling: "Fantasy",
-      personality: "Fiery, Unpredictable, Strong",
-      favoriteTools: ["Whips", "Chains", "Crops"],
+      personality: "Elegant, Commanding, Experienced",
+      favoriteTools: ["Whips", "Crops", "Chains"],
     },
     contactInfo: {
-      email: "raven@example.com",
+      email: "madame.noir88@gmail.com",
       phone: "Available upon request",
     },
   },
   {
-    id: 23099302309,
-    name: "Queen Isolde",
-    image: "/images/actress9.jpg",
-    bio: "Regal, commanding, and transformative.",
+    id: 23099302305,
+    name: "Lucy Perez",
+    image: "/images/domme.jpg",
+    bio: "Young Domme with fresh energy and creativity.",
     description: `
-Isolde rules her domain with elegance and authority. 
-Her sessions bring a regal sense of order, control, and refinement.
+At just 22, Lucy Perez combines youthful energy with an intuitive understanding of control and play. 
+Her sessions are playful yet intense, balancing nurturing charm with firm authority. 
+She enjoys guiding clients through fantasy explorations and roleplay journeys.
 `,
     interests: [
       "Roleplay",
-      "Power Exchange",
       "Bondage",
-      "Impact Play",
+      "Spanking",
+      "Foot Worship",
+      "Tease & Denial",
+      "Sissification",
       "Sensory Play",
     ],
     disclaimer:
-      "Only role-play fetish. No nudity or illegal acts.",
+      "Sessions are fetish and fantasy only. No nudity or sexual services are offered.",
     profile: {
-      birthday: "Sep 22",
-      height: "5ft 11in",
-      shoeSize: "10",
-      hairColor: "Blonde",
-      eyeColor: "Blue",
-      availability: ["Incall"],
-      services: ["Dominant"],
-      ethnicity: ["Caucasian"],
+      birthday: "Feb 19",
+      height: "5ft 5in",
+      shoeSize: "7",
+      hairColor: "Dark Brown",
+      eyeColor: "Hazel",
+      availability: ["Virtual", "Incall"],
+      services: ["Dominant", "Switch"],
+      ethnicity: ["Latin"],
       multilingual: true,
       tattoos: false,
       smoking: false,
       wrestling: "Fantasy",
-      personality: "Regal, Strict, Elegant",
-      favoriteTools: ["Chains", "Whips", "Blindfolds"],
+      personality: "Playful, Curious, Bold",
+      favoriteTools: ["Ropes", "Blindfolds", "Paddles"],
     },
     contactInfo: {
-      email: "isolde@example.com",
+      email: "lucy.perez22@gmail.com",
       phone: "Available upon request",
     },
   },
-
-   {
-    id: 23099302311,
-    name: "Lucy Perez",
-    image: "/images/domme.jpg",
-    bio: "Young, passionate, and ready to explore new experiences.",
+  {
+    id: 23099302304,
+    name: "Madame Celeste",
+    image: "/images/actress5.jpg",
+    bio: "Refined Domme with cosmic elegance.",
     description: `
-At just 22 years old, Lucy brings fresh energy and a curious spirit into every encounter. 
-She enjoys building authentic connections and discovering new dynamics with each session. 
-Her style blends openness, creativity, and a willingness to learn while maintaining respect and boundaries.
+Celeste embodies sophistication and cosmic mystery. She designs sessions that feel like an astral journey, combining psychological dominance with sensory play. 
+Her calm yet commanding aura makes every experience transformative and unforgettable.
 `,
     interests: [
       "Roleplay",
       "Bondage",
-      "Sensory Play",
-      "Tease & Denial",
-      "Light Fetish Exploration",
+      "Sensory Exploration",
+      "Fetish",
+      "Power Exchange",
+      "Whips",
+      "Chains",
     ],
     disclaimer:
-      "Fetish & fantasy role-play only. No nudity or sexual services. Illegal activities are prohibited.",
+      "Strictly fetish & fantasy. No explicit or illegal activities permitted.",
     profile: {
-      birthday: "Feb 19, 2003",
-      age: 22,
-      height: "5ft 4in",
-      shoeSize: "7.5",
-      hairColor: "Dark Brown",
+      birthday: "May 14",
+      height: "5ft 10in",
+      shoeSize: "9.5",
+      hairColor: "Blonde",
+      eyeColor: "Blue",
+      availability: ["Incall", "Outcall"],
+      services: ["Dominant", "Couples"],
+      ethnicity: ["Caucasian"],
+      multilingual: true,
+      tattoos: true,
+      smoking: false,
+      wrestling: "Fantasy",
+      personality: "Mystical, Calm, Empowering",
+      favoriteTools: ["Chains", "Blindfolds", "Candle Wax"],
+    },
+    contactInfo: {
+      email: "madame.celeste@hotmail.com",
+      phone: "Available upon request",
+    },
+  },
+  {
+    id: 23099302303,
+    name: "Mistress Valeria",
+    image: "/images/actress6.jpg",
+    bio: "Intense Domme with a flair for the dramatic.",
+    description: `
+Valeria thrives on intensity and theatrics. Her sessions are bold, passionate, and unforgettable. 
+She specializes in strict discipline, roleplay fantasy, and pushing limits safely.
+`,
+    interests: [
+      "Discipline",
+      "Roleplay",
+      "Flogging",
+      "Bondage",
+      "Spanking",
+      "Tease & Denial",
+      "Foot Worship",
+    ],
+    disclaimer:
+      "Fantasy role-play and fetish only. No sexual or illegal services.",
+    profile: {
+      birthday: "Jun 30",
+      height: "5ft 7in",
+      shoeSize: "8",
+      hairColor: "Black",
       eyeColor: "Brown",
+      availability: ["Incall", "Outcall"],
+      services: ["Dominant", "Switch"],
+      ethnicity: ["Mediterranean"],
+      multilingual: true,
+      tattoos: true,
+      smoking: false,
+      wrestling: "Fantasy",
+      personality: "Dramatic, Passionate, Bold",
+      favoriteTools: ["Floggers", "Paddles", "Whips"],
+    },
+    contactInfo: {
+      email: "valeria.domme@yahoo.com",
+      phone: "Available upon request",
+    },
+  },
+  {
+    id: 23099302302,
+    name: "Lady Seraphina",
+    image: "/images/actress7.jpg",
+    bio: "Ethereal Domme with graceful authority.",
+    description: `
+Seraphina blends grace with undeniable authority. Her style is subtle yet powerful, focusing on psychological play and refined domination. 
+Every encounter with her feels like a divine experience.
+`,
+    interests: [
+      "Roleplay",
+      "Bondage",
+      "Psychological Play",
+      "Tease & Denial",
+      "Sensory Exploration",
+      "Whips",
+      "Candle Wax",
+    ],
+    disclaimer:
+      "Fetish-based sessions only. Explicit or illegal activities are not provided.",
+    profile: {
+      birthday: "Sep 12",
+      height: "5ft 8in",
+      shoeSize: "8.5",
+      hairColor: "Auburn",
+      eyeColor: "Green",
       availability: ["Incall", "Virtual"],
-      services: ["Switch", "Couples"],
-      ethnicity: ["Hispanic"],
-      multilingual: false,
+      services: ["Dominant", "Couples"],
+      ethnicity: ["Mixed"],
+      multilingual: true,
       tattoos: false,
       smoking: false,
       wrestling: "Fantasy",
-      personality: "Playful, Curious, Energetic",
-      favoriteTools: ["Ropes", "Feathers", "Blindfolds"],
+      personality: "Graceful, Calm, Enigmatic",
+      favoriteTools: ["Whips", "Feathers", "Chains"],
     },
     contactInfo: {
-      email: "lucy.perez@example.com",
+      email: "lady.seraphina@gmail.com",
       phone: "Available upon request",
     },
   },
 ];
+
+
 
 
 export default function Dommes() {
