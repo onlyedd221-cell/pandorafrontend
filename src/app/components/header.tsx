@@ -8,8 +8,11 @@ import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client/react";
 import { gql } from "@apollo/client";
+import { jwtDecode } from "jwt-decode";
 
+// ==========================
 // GraphQL signOut mutation
+// ==========================
 const SIGN_OUT = gql`
   mutation {
     signOut {
@@ -18,9 +21,14 @@ const SIGN_OUT = gql`
   }
 `;
 
+interface DecodedToken {
+  exp: number; // expiry timestamp
+}
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -30,13 +38,90 @@ export default function Header() {
       message: string;
     };
   }
-  
+
   const [signOutMutation] = useMutation<SignOutData>(SIGN_OUT);
 
+  // ==========================
+  // Sign Out Logic
+  // ==========================
+  const handleSignOut = async (redirectToAuth = false) => {
+    try {
+      setLoading(true);
+      console.log("🔴 Signing out... redirectToAuth =", redirectToAuth);
+
+      const { data } = await signOutMutation();
+      console.log("✅ Sign out response:", data);
+
+      toast.success(data?.signOut?.message || "Signed out successfully");
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      setUser(null);
+
+      if (redirectToAuth) {
+        console.log("➡️ Redirecting to /authPage after sign out");
+        router.push("/authPage");
+      } else {
+        console.log("➡️ Redirecting to / after sign out");
+        router.push("/");
+      }
+
+      setMenuOpen(false);
+    } catch (err: any) {
+      console.error("❌ Error during sign out:", err);
+      toast.error("Error signing out");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ==========================
+  // Auto logout when token expires
+  // ==========================
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
-      if (storedUser) setUser(JSON.parse(storedUser));
+      const storedToken = localStorage.getItem("token");
+
+      console.log("📦 Stored user:", storedUser);
+      console.log("📦 Stored token:", storedToken);
+
+      if (storedUser && storedToken) {
+        try {
+          const decoded: DecodedToken = jwtDecode(storedToken);
+          const expiryTime = decoded.exp * 1000;
+          const now = Date.now();
+
+          console.log("🕒 Decoded token expiry:", new Date(expiryTime));
+          console.log("🕒 Current time:", new Date(now));
+
+          if (expiryTime <= now) {
+            console.warn("⚠️ Token already expired. Logging out.");
+            toast.error("Session expired. Please sign in again.");
+            handleSignOut(true);
+          } else {
+            const timeout = expiryTime - now;
+            console.log(`⏳ Setting auto logout in ${timeout / 1000} seconds`);
+
+            const timer = setTimeout(() => {
+              console.warn("⚠️ Token expired. Auto logging out.");
+              toast.error("Session expired. Please sign in again.");
+              handleSignOut(true);
+            }, timeout);
+
+            setUser(JSON.parse(storedUser));
+
+            // Cleanup timer on unmount
+            return () => {
+              console.log("🧹 Clearing logout timer");
+              clearTimeout(timer);
+            };
+          }
+        } catch (err) {
+          console.error("❌ Invalid token detected:", err);
+          handleSignOut(true);
+        }
+      }
     }
   }, []);
 
@@ -51,27 +136,14 @@ export default function Header() {
 
   const handleNavClick = (href: string, protectedRoute?: boolean) => {
     if (protectedRoute && !isLoggedIn) {
+      console.warn("⚠️ Tried accessing protected route without login:", href);
       toast.error("Please sign in to access bookings");
       router.push("/authPage");
     } else {
+      console.log("➡️ Navigating to:", href);
       router.push(href);
     }
     setMenuOpen(false);
-  };
-
-  const handleSignOut = async () => {
-    try {
-      const { data } = await signOutMutation();
-      toast.success(data?.signOut?.message || "Signed out successfully");
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      setUser(null);
-      router.push("/");
-      setMenuOpen(false);
-    } catch (err: any) {
-      console.error(err);
-      toast.error("Error signing out");
-    }
   };
 
   return (
@@ -102,14 +174,40 @@ export default function Header() {
 
         {isLoggedIn ? (
           <button
-            onClick={handleSignOut}
-            className="ml-4 text-sm px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+            onClick={() => handleSignOut()}
+            disabled={loading}
+            className="ml-4 text-sm px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg flex items-center gap-2"
           >
+            {loading && (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                ></path>
+              </svg>
+            )}
             Sign Out
           </button>
         ) : (
           <button
-            onClick={() => router.push("/authPage")}
+            onClick={() => {
+              console.log("➡️ Redirecting to authPage for sign in");
+              router.push("/authPage");
+            }}
             className="ml-4 text-sm px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg"
           >
             Sign In
@@ -120,7 +218,10 @@ export default function Header() {
       {/* Mobile Hamburger */}
       <button
         className="md:hidden p-2 rounded-lg bg-pink-500"
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => {
+          console.log("📱 Mobile menu toggled. Open:", !menuOpen);
+          setMenuOpen(!menuOpen);
+        }}
       >
         {menuOpen ? <X /> : <Menu />}
       </button>
@@ -144,14 +245,40 @@ export default function Header() {
 
           {isLoggedIn ? (
             <button
-              onClick={handleSignOut}
-              className="w-full text-sm px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+              onClick={() => handleSignOut()}
+              disabled={loading}
+              className="w-full text-sm px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg flex items-center gap-2"
             >
+              {loading && (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                  ></path>
+                </svg>
+              )}
               Sign Out
             </button>
           ) : (
             <button
-              onClick={() => router.push("/authPage")}
+              onClick={() => {
+                console.log("➡️ Redirecting to authPage for sign in (mobile)");
+                router.push("/authPage");
+              }}
               className="w-full text-sm px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg"
             >
               Sign In

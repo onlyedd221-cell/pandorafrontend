@@ -424,7 +424,33 @@ return (
     </section>
 
     {/* <ChatWidget /> */}
+<section
+      className="relative h-96 flex items-center justify-center text-center px-4"
+      style={{
+        backgroundImage: `url('/images/actress4.jpg')`, // replace with your image path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/60"></div>
 
+      {/* Content */}
+      <div className="relative z-10 max-w-2xl text-white">
+        <h2 className="text-3xl sm:text-5xl font-extrabold mb-4">
+          We are Looking for New Dommes
+        </h2>
+        <p className="text-lg sm:text-xl mb-6 font-light">
+          Do you think you have what it takes to become a Mistress at Pandora Goddess Clubhouse Dungeon NY?
+        </p>
+        <Link
+          href="/applyPage" // replace with your actual application page
+          className="bg-pink-500 hover:bg-pink-600 px-6 py-3 rounded-lg font-semibold transition"
+        >
+          Apply Here
+        </Link>
+      </div>
+    </section>
     <Footer />
   </div>
 );

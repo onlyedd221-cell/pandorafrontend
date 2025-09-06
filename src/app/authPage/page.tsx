@@ -16,6 +16,7 @@ export default function AuthPage() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -32,6 +33,7 @@ export default function AuthPage() {
     }
 
     try {
+      setLoading(true);
       const { data } = await registerUser({ variables: { name, email, password } });
       const registerData = data as { register: { token: string; user: any } };
 
@@ -43,6 +45,8 @@ export default function AuthPage() {
     } catch (err: any) {
       setError(err.message);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,8 +60,12 @@ export default function AuthPage() {
     }
 
     try {
+      setLoading(true);
       const { data } = await loginUser({ variables: { email, password } });
       const loginData = data as { login: { token: string; user: any } };
+
+      console.log(loginData);
+      console.log(data);
 
       localStorage.setItem("token", loginData.login.token);
       localStorage.setItem("user", JSON.stringify(loginData.login.user));
@@ -67,6 +75,8 @@ export default function AuthPage() {
     } catch (err: any) {
       setError(err.message);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,8 +85,7 @@ export default function AuthPage() {
       <Header />
       <div className="bg-gray-900 rounded-2xl shadow-xl p-8 w-full max-w-md text-center border border-pink-500">
         <h2 className="text-2xl font-bold text-pink-400 mb-4">
-          {view === "login" && "Login"}
-          {view === "register" && "Register"}
+          {view === "login" ? "Login" : "Register"}
         </h2>
 
         {/* REGISTER */}
@@ -118,8 +127,31 @@ export default function AuthPage() {
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 transition px-4 py-2 rounded-lg font-semibold"
+              disabled={loading}
+              className="w-full bg-pink-500 hover:bg-pink-600 transition px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-2"
             >
+              {loading && (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                  ></path>
+                </svg>
+              )}
               Register
             </button>
           </form>
@@ -157,8 +189,31 @@ export default function AuthPage() {
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 transition px-4 py-2 rounded-lg font-semibold"
+              disabled={loading}
+              className="w-full bg-pink-500 hover:bg-pink-600 transition px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-2"
             >
+              {loading && (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                  ></path>
+                </svg>
+              )}
               Login
             </button>
           </form>

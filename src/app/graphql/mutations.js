@@ -12,20 +12,7 @@ export const REGISTER_USER = gql`
         id
         name
         email
-      }
-    }
-  }
-`;
-
-export const VERIFY_OTP = gql`
-  mutation VerifyOTP($email: String!, $otp: String!) {
-    verifyOTP(email: $email, otp: $otp) {
-      message
-      token
-      user {
-        id
-        name
-        email
+        archived
       }
     }
   }
@@ -40,6 +27,7 @@ export const LOGIN_USER = gql`
         id
         name
         email
+        archived
       }
     }
   }
@@ -54,10 +42,30 @@ export const SIGN_OUT = gql`
 `;
 
 // ==========================
-// Chat Queries & Mutations
+// Chat Queries
 // ==========================
+export const GET_ALL_CHATS = gql`
+  query GetAllChats {
+    getAllChats {
+      id
+      name
+      email
+      archived
+    }
+  }
+`;
 
-// Get all messages for a chat
+export const GET_ARCHIVED_CHATS = gql`
+  query GetArchivedChats {
+    getArchivedChats {
+      id
+      name
+      email
+      archived
+    }
+  }
+`;
+
 export const GET_MESSAGES = gql`
   query GetMessages($chatId: String!) {
     getMessages(chatId: $chatId) {
@@ -71,7 +79,9 @@ export const GET_MESSAGES = gql`
   }
 `;
 
-// Send a new message
+// ==========================
+// Chat Mutations
+// ==========================
 export const SEND_MESSAGE = gql`
   mutation SendMessage(
     $chatId: String!
@@ -90,13 +100,18 @@ export const SEND_MESSAGE = gql`
   }
 `;
 
-// Get all chat IDs (for admin to see all users)
-export const GET_ALL_CHATS = gql`
-  query GetAllChats {
-    getAllChats {
-      id
-      name
-      email
+export const ARCHIVE_CHAT = gql`
+  mutation ArchiveChat($chatId: String!) {
+    archiveChat(chatId: $chatId) {
+      message
+    }
+  }
+`;
+
+export const UNARCHIVE_CHAT = gql`
+  mutation UnarchiveChat($chatId: String!) {
+    unarchiveChat(chatId: $chatId) {
+      message
     }
   }
 `;

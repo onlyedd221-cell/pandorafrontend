@@ -8,7 +8,7 @@ import Header from "../components/header";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { GET_ALL_CHATS, GET_MESSAGES, SEND_MESSAGE } from "../graphql/mutations";
 
-const ADMIN_EMAIL = "blissfortune222@gmail.com";
+const ADMIN_EMAIL = "admin302@gmail.com";
 
 interface Message {
   id: string;

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import Image from "next/image";
@@ -16,6 +17,9 @@ import bitcoinLogo from "../../../public/logos/bitcoin.png";
 import ChatWidget from "../components/ChatWidget";
 
 export default function BookingPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -29,6 +33,21 @@ export default function BookingPage() {
     sessionType: "",
   });
 
+  // ✅ Protect page: check if user exists
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) {
+        toast.error("⚠️ You must log in to access bookings");
+        setTimeout(() => {
+          router.push("/authPage");
+        }, 1500); // wait 1.5s so toast is visible
+      } else {
+        setLoading(false);
+      }
+    }
+  }, [router]);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -39,11 +58,8 @@ export default function BookingPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Booking Submitted:");
     console.table(formData);
-
-    // ✅ Show toast instead of custom div
-    toast.success("Booking submitted! Contact support for payment details.");
+    toast.success("✅ Booking submitted! Contact support for payment details.");
   };
 
   const rooms = ["Chinese Torture", "Classic Chamber", "VIP Room"];
@@ -53,7 +69,6 @@ export default function BookingPage() {
     { label: "VIP = $1000", value: "vip" },
     { label: "Membership fee = $1500", value: "membership" },
   ];
-
   const paymentMethods = [
     { name: "Zelle", logo: zelleLogo },
     { name: "Cash App", logo: cashAppLogo },
@@ -63,6 +78,15 @@ export default function BookingPage() {
     { name: "Giftcard", logo: giftcardLogo },
     { name: "Bitcoin", logo: bitcoinLogo },
   ];
+
+  // ⏳ Loader spinner while checking auth
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="font-sans text-white bg-black min-h-screen flex flex-col relative">
@@ -113,7 +137,11 @@ export default function BookingPage() {
             {paymentMethods.map((p) => (
               <div
                 key={p.name}
-                className="flex items-center gap-2 justify-center text-green-400 px-3 py-1 rounded-lg hover:text-white transition-colors cursor-pointer"
+                className={`flex items-center gap-2 justify-center px-3 py-1 rounded-lg transition-colors cursor-pointer ${
+                  formData.paymentMethod === p.name
+                    ? "text-white underline"
+                    : "text-green-400 hover:text-white"
+                }`}
                 onClick={() =>
                   setFormData({ ...formData, paymentMethod: p.name })
                 }
