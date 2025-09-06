@@ -13,11 +13,33 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 export const metadata: Metadata = {
   title: "Pandora Mistress Clubhouse",
   description: "Welcome to the Pandora Mistress Clubhouse – Manage your bookings easily",
+  openGraph: {
+    title: "Pandora Mistress Clubhouse",
+    description: "Welcome to the Pandora Mistress Clubhouse – Manage your bookings easily",
+    url: "https://pandoragoddessclubhouse.vercel.app",
+    siteName: "Pandora Mistress Clubhouse",
+    images: [
+      {
+        url: "https://pandoragoddessclubhouse.vercel.app/images/og-preview.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Pandora Mistress Clubhouse Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pandora Mistress Clubhouse",
+    description: "Welcome to the Pandora Mistress Clubhouse – Manage your bookings easily",
+    images: ["https://pandoragoddessclubhouse.vercel.app/images/og-preview.jpg"],
+  },
 };
+
 
 export default function RootLayout({
   children,
