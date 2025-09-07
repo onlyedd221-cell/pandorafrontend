@@ -153,7 +153,7 @@ export default function Header() {
         href="/"
         className="text-2xl font-extrabold tracking-wide text-pink-400"
       >
-        Pandora Clubhouse
+        Fetish Fortress 
       </Link>
 
       {/* Desktop Nav */}
