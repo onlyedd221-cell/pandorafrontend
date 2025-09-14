@@ -25,7 +25,7 @@ export default function Footer() {
         <div>
           <h4 className="font-bold text-lg mb-4">About Us</h4>
           <p className="text-gray-400 text-sm">
-            BookingPro is a premier booking experience dedicated to providing
+            Fetish Fortress is a premier booking experience dedicated to providing
             elegant spaces and unforgettable encounters worldwide.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function Footer() {
         {/* Contact */}
         <div>
           <h4 className="font-bold text-lg mb-4">Contact</h4>
-          <p className="text-gray-400 text-sm ">pandoraclubhouse@gmail.com</p>
+          <p className="text-gray-400 text-sm ">FetishFortress@gmail.com</p>
           {/* <p className="text-gray-400 text-sm">+1 (555) 123-4567</p> */}
         </div>
 
