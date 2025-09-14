@@ -5,10 +5,11 @@ import { ApolloProvider } from "@apollo/client/react";
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: "https://pandora-mistress-backend.onrender.com/graphql", // updated GraphQL endpoint
+    uri: "https://pandorabackend-7e67.onrender.com/graphql", // ✅ correct spelling
   }),
   cache: new InMemoryCache(),
 });
+
 
 export default function ApolloProviderWrapper({ children }) {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
