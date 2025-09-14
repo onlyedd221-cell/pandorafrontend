@@ -63,12 +63,13 @@ export default function BookingPage() {
   };
 
   const rooms = ["Chinese Torture", "Classic Chamber", "VIP Room"];
-  const sessionTypes = [
-    { label: "Mini session  = $300", value: "mini" },
-    { label: "Classic session = $560", value: "classic" },
-    { label: "VIP = $1000", value: "vip" },
-    { label: "Membership fee = $1500", value: "membership" },
-  ];
+const sessionTypes = [
+  { label: "Mini session  = £300", value: "mini" },
+  { label: "Classic session = £560", value: "classic" },
+  { label: "VIP = £1000", value: "vip" },
+  { label: "Membership fee = £1500", value: "membership" },
+];
+
   const paymentMethods = [
     { name: "Zelle", logo: zelleLogo },
     { name: "Cash App", logo: cashAppLogo },
