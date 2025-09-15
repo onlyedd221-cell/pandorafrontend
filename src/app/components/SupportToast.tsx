@@ -22,7 +22,7 @@ export default function SupportToast({ onChatOpen }: SupportToastProps) {
     <div className="fixed bottom-28 right-6 bg-pink-600 text-white px-4 py-3 rounded-lg shadow-lg animate-fade-in z-50 max-w-xs">
       <div className="p-3 space-y-3 text-sm">
         <p>
-          Welcome to <strong>Pandora Goddess Club House!</strong> 👋 <br />
+          Welcome to <strong>The Fetish Fortress Club House!</strong> 👋 <br />
           Whether you have a specific question or need assistance, we’re here
           for you. 😉 <br />
           What would you like to know?

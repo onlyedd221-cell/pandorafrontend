@@ -62,7 +62,7 @@ export default function ApplyPage() {
           Apply to Become a Domme
         </h1>
         <p className="text-center max-w-2xl mb-12 text-gray-300">
-          If you think you have what it takes to join the Pandora Goddess
+          If you think you have what it takes to join the The Fetish Fortress
           Clubhouse Dungeon NY as a Mistress, fill out the application below. Be
           honest, creative, and show us your experience.
         </p>

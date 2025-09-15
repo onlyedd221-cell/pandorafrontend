@@ -115,3 +115,68 @@ export const UNARCHIVE_CHAT = gql`
     }
   }
 `;
+
+// ==========================
+// Booking Queries & Mutations
+// ==========================
+export const GET_USER_BOOKINGS = gql`
+  query GetUserBookings($userId: ID!) {
+    getUserBookings(userId: $userId) {
+      id
+      userId
+      name
+      phone
+      email
+      room
+      date
+      time
+      duration
+      notes
+      paymentMethod
+      sessionType
+      createdAt
+    }
+  }
+`;
+
+export const CREATE_BOOKING = gql`
+  mutation CreateBooking(
+    $name: String!
+    $phone: String!
+    $email: String!
+    $room: String!
+    $date: String!
+    $time: String!
+    $duration: String!
+    $notes: String
+    $paymentMethod: String!
+    $sessionType: String!
+  ) {
+    createBooking(
+      name: $name
+      phone: $phone
+      email: $email
+      room: $room
+      date: $date
+      time: $time
+      duration: $duration
+      notes: $notes
+      paymentMethod: $paymentMethod
+      sessionType: $sessionType
+    ) {
+      id
+      userId
+      name
+      phone
+      email
+      room
+      date
+      time
+      duration
+      notes
+      paymentMethod
+      sessionType
+      createdAt
+    }
+  }
+`;

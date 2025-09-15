@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -44,86 +44,75 @@ export default function Header() {
   // ==========================
   // Sign Out Logic
   // ==========================
-  const handleSignOut = async (redirectToAuth = false) => {
-    try {
-      setLoading(true);
-      console.log("🔴 Signing out... redirectToAuth =", redirectToAuth);
+ const handleSignOut = useCallback(
+    async (redirectToAuth = false) => {
+      try {
+        setLoading(true);
 
-      const { data } = await signOutMutation();
-      console.log("✅ Sign out response:", data);
+        const { data } = await signOutMutation();
 
-      toast.success(data?.signOut?.message || "Signed out successfully");
+        toast.success(data?.signOut?.message || "Signed out successfully");
 
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      setUser(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        setUser(null);
 
-      if (redirectToAuth) {
-        console.log("➡️ Redirecting to /authPage after sign out");
-        router.push("/authPage");
-      } else {
-        console.log("➡️ Redirecting to / after sign out");
-        router.push("/");
+        if (redirectToAuth) router.push("/authPage");
+        else router.push("/");
+
+        setMenuOpen(false);
+      } catch (err) {
+        console.error(err);
+        toast.error("Error signing out");
+      } finally {
+        setLoading(false);
       }
-
-      setMenuOpen(false);
-    } catch (err: any) {
-      console.error("❌ Error during sign out:", err);
-      toast.error("Error signing out");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [router, signOutMutation]
+  );
 
   // ==========================
   // Auto logout when token expires
   // ==========================
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      const storedToken = localStorage.getItem("token");
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-      console.log("📦 Stored user:", storedUser);
-      console.log("📦 Stored token:", storedToken);
+  const storedUser = localStorage.getItem("user");
+  const storedToken = localStorage.getItem("token");
 
-      if (storedUser && storedToken) {
-        try {
-          const decoded: DecodedToken = jwtDecode(storedToken);
-          const expiryTime = decoded.exp * 1000;
-          const now = Date.now();
+  if (!storedUser || !storedToken) return;
 
-          console.log("🕒 Decoded token expiry:", new Date(expiryTime));
-          console.log("🕒 Current time:", new Date(now));
+  let mounted = true;
 
-          if (expiryTime <= now) {
-            console.warn("⚠️ Token already expired. Logging out.");
-            toast.error("Session expired. Please sign in again.");
-            handleSignOut(true);
-          } else {
-            const timeout = expiryTime - now;
-            console.log(`⏳ Setting auto logout in ${timeout / 1000} seconds`);
+  try {
+    const decoded: DecodedToken = jwtDecode(storedToken);
+    const expiryTime = decoded.exp * 1000;
+    const now = Date.now();
 
-            const timer = setTimeout(() => {
-              console.warn("⚠️ Token expired. Auto logging out.");
-              toast.error("Session expired. Please sign in again.");
-              handleSignOut(true);
-            }, timeout);
+    if (expiryTime <= now) {
+      console.warn("Token expired. Logging out.");
+      setTimeout(() => handleSignOut(true), 0); // break render cycle
+    } else {
+      if (mounted) setUser(JSON.parse(storedUser));
 
-            setUser(JSON.parse(storedUser));
+      const timeout = expiryTime - now;
+      const timer = setTimeout(() => {
+        console.warn("Token expired. Auto logging out.");
+        toast.error("Session expired. Please sign in again.");
+        handleSignOut(true);
+      }, timeout);
 
-            // Cleanup timer on unmount
-            return () => {
-              console.log("🧹 Clearing logout timer");
-              clearTimeout(timer);
-            };
-          }
-        } catch (err) {
-          console.error("❌ Invalid token detected:", err);
-          handleSignOut(true);
-        }
-      }
+      return () => {
+        mounted = false;
+        clearTimeout(timer);
+      };
     }
-  }, []);
+  } catch (err) {
+    console.error("Invalid token:", err);
+    setTimeout(() => handleSignOut(true), 0);
+  }
+}, []);
+
 
   const isLoggedIn = !!user;
 
@@ -153,7 +142,7 @@ export default function Header() {
         href="/"
         className="text-2xl font-extrabold tracking-wide text-pink-400"
       >
-        Pandora Clubhouse
+        Fetish Fortress 
       </Link>
 
       {/* Desktop Nav */}

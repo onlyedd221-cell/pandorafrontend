@@ -15,7 +15,8 @@ import venmoLogo from "../../../public/logos/venmo.png";
 import giftcardLogo from "../../../public/logos/giftcard.png";
 import bitcoinLogo from "../../../public/logos/bitcoin.png";
 import ChatWidget from "../components/ChatWidget";
-
+import { CREATE_BOOKING } from "../graphql/mutations";
+import { useMutation } from "@apollo/client/react";
 export default function BookingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -56,19 +57,49 @@ export default function BookingPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [createBooking, { loading: bookingLoading }] = useMutation(
+    CREATE_BOOKING,
+    {
+      onCompleted: () => {
+        toast.success("✅ Booking submitted successfully!");
+        setFormData({
+          name: "",
+          phone: "",
+          email: "",
+          room: "",
+          date: "",
+          time: "",
+          duration: "",
+          notes: "",
+          paymentMethod: "",
+          sessionType: "",
+        });
+      },
+      onError: (err) => {
+        toast.error(`❌ Booking failed: ${err.message}`);
+      },
+    }
+  );
+
+  console.log("is loading", bookingLoading);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.table(formData);
-    toast.success("✅ Booking submitted! Contact support for payment details.");
+
+    try {
+      await createBooking({ variables: { ...formData } });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const rooms = ["Chinese Torture", "Classic Chamber", "VIP Room"];
-const sessionTypes = [
-  { label: "Mini session  = £300", value: "mini" },
-  { label: "Classic session = £560", value: "classic" },
-  { label: "VIP = £1000", value: "vip" },
-  { label: "Membership fee = £1500", value: "membership" },
-];
+  const sessionTypes = [
+    { label: "Mini session  = £300", value: "mini" },
+    { label: "Classic session = £560", value: "classic" },
+    { label: "VIP = £1000", value: "vip" },
+    { label: "Membership fee = £1500", value: "membership" },
+  ];
 
   const paymentMethods = [
     { name: "Zelle", logo: zelleLogo },
@@ -97,7 +128,7 @@ const sessionTypes = [
         {/* Page Header */}
         <section className="text-center space-y-2">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
-            The Pandora Goddess Clubhouse
+         The Fetish Fortress Club House
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">
             Book A Session
@@ -245,9 +276,10 @@ const sessionTypes = [
 
             <button
               type="submit"
-              className="w-full bg-pink-500 cursor-pointer hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold mt-2"
+              disabled={bookingLoading}
+              className="w-full bg-pink-500 cursor-pointer hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Schedule Now
+              {bookingLoading ? "Submitting..." : "Schedule Now"}
             </button>
           </form>
 

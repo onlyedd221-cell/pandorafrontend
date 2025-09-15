@@ -6,7 +6,6 @@ import {
   X,
   Send,
   FileText,
-  ArrowDownCircle,
   Archive,
 } from "lucide-react";
 import { useMutation, useQuery } from "@apollo/client/react";
@@ -17,6 +16,7 @@ import {
   GET_ARCHIVED_CHATS,
   ARCHIVE_CHAT,
   UNARCHIVE_CHAT,
+  GET_USER_BOOKINGS,
 } from "../graphql/mutations";
 import ChatHeader from "./chatHeader";
 
@@ -49,10 +49,8 @@ export default function ChatWidget() {
     id: string;
     name: string;
   } | null>(null);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  console.log("showScrollTop:", showScrollTop);
+  // const [showScrollButton, setShowScrollButton] = useState(false);
+  // const [showScrollTop , setShowScrollTop] = useState(false);
 
   // 🔑 Archive toggle
   const [showArchived, setShowArchived] = useState(false);
@@ -85,8 +83,14 @@ export default function ChatWidget() {
   }, [isOpen]);
 
   // Queries
+
   const { data: allChatsData, refetch: refetchActive } = useQuery<{
-    getAllChats: { id: string; name: string; email: string; archived: boolean }[];
+    getAllChats: {
+      id: string;
+      name: string;
+      email: string;
+      archived: boolean;
+    }[];
   }>(GET_ALL_CHATS, {
     skip: !user || user.email !== ADMIN_EMAIL,
     fetchPolicy: "network-only",
@@ -112,6 +116,57 @@ export default function ChatWidget() {
     pollInterval: 2000,
   });
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+const [selectedChatUserId, setSelectedChatUserId] = useState<string | null>(null);
+
+  const storedUser = localStorage.getItem("user");
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
+
+  // ✅ Log current user
+  useEffect(() => {
+    console.log("Current user from localStorage:", currentUser);
+  }, [currentUser]);
+
+  const isAdmin = currentUser?.email === "admin302@gmail.com";
+
+// Fetch bookings for Admin (selected user) or for normal user (self)
+interface Booking {
+  id: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  sessionType?: string;
+  date?: string;
+  time?: string;
+  duration?: string;
+  room?: string;
+  paymentMethod?: string;
+  notes?: string;
+  createdAt?: string;
+}
+
+const { 
+  data: bookingsData, 
+  // loading: bookingsLoading, 
+  error: bookingsError 
+} = useQuery<{ getUserBookings: Booking[] }>(GET_USER_BOOKINGS, {
+  variables: { userId: isAdmin ? selectedChatUserId || "" : user?.id || "" },
+  skip: isAdmin ? !selectedChatUserId : !user, // skip if admin has no selected user, or if normal user not loaded
+  fetchPolicy: "network-only",
+});
+
+
+  useEffect(() => {
+    if (!isAdmin) console.warn("You are not admin, cannot fetch bookings");
+  }, [isAdmin]);
+
+  useEffect(() => {
+    if (bookingsData) console.log("Bookings datt:", bookingsData?.getUserBookings);
+    if (bookingsError) console.error("Error fetching bookings:", bookingsError);
+  }, [bookingsData, bookingsError]);
+
+
+
   // Mutations
   const [sendMessage] = useMutation(SEND_MESSAGE, {
     onCompleted: () => {
@@ -133,27 +188,10 @@ export default function ChatWidget() {
     },
   });
 
-  // Chat scroll bottom button
-useEffect(() => {
-  const container = messagesContainerRef.current;
-  if (!container) return;
-
-  const handleScroll = () => {
-    const isAtBottom =
-      container.scrollHeight - container.scrollTop <=
-      container.clientHeight + 50;
-    setShowScrollButton(!isAtBottom);
-
-    const isAtTop = container.scrollTop < 50;
-    setShowScrollTop(!isAtTop);
-  };
-
-  container.addEventListener("scroll", handleScroll);
-  return () => container.removeEventListener("scroll", handleScroll);
-}, []);
 
 
- 
+;
+
   // Auto-scroll to bottom if at bottom
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -166,14 +204,7 @@ useEffect(() => {
     }
   }, [messagesData?.getMessages?.length]);
 
-  // Global scroll-to-top button
-  useEffect(() => {
-    const handlePageScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", handlePageScroll);
-    return () => window.removeEventListener("scroll", handlePageScroll);
-  }, []);
+
 
   // Close modal when clicking outside
   useEffect(() => {
@@ -216,32 +247,84 @@ useEffect(() => {
         })
       : "";
 
-const handleClose = () => {
-  if (user?.email === ADMIN_EMAIL && chatId) {
-    // Admin is inside a chat → go back to chat list
-    setChatId("");
-    setSelectedChat(null);
-  } else {
-    // Normal user or admin not inside a chat → close modal
-    setIsOpen(false);
-  }
-};
+  const handleClose = () => {
+    if (user?.email === ADMIN_EMAIL && chatId) {
+      // Admin is inside a chat → go back to chat list
+      setChatId("");
+      setSelectedChat(null);
+         setSelectedChatUserId(null);
+    } else {
+      // Normal user or admin not inside a chat → close modal
+      setIsOpen(false);
+    }
+  };
+// (autoReplySentMap state removed as it was unused)
+
+// Transform bookings into messages safely
+const bookingMessages: Message[] = bookingsData?.getUserBookings?.map((b) => ({
+  id: `booking-${b.id}`,
+  chatId: chatId,
+  // "If admin is viewing, bookings are from user; otherwise, show admin auto-reply".//
+  from: isAdmin ? "user" : "admin", // If admin viewing, it’s user bookings; if normal user, it’s admin auto-reply
+  type: "text",
+  content: `
+Booking Details:
+- Name: ${b.name || "Unknown"}
+- Email: ${b.email || "Unknown"}
+- Phone: ${b.phone || "Unknown"}
+- Session Type: ${b.sessionType || "Unknown"}
+- Date: ${b.date ? new Date(b.date).toLocaleDateString() : "Unknown Date"}
+- Time: ${b.time || "Unknown Time"}
+- Duration: ${b.duration || "Unknown"}
+- Room: ${b.room || "Unknown"}
+- Payment Method: ${b.paymentMethod || "Unknown"}
+- Notes: ${b.notes || "None"}
+  `.trim(),
+  timestamp: b.createdAt
+    ? new Date(b.createdAt).getTime().toString()
+    : Date.now().toString(),
+})) || [];
 
 
-  const messages: Message[] =
-    messagesData?.getMessages?.length
-      ? messagesData.getMessages
-      : [
-          {
-            id: "welcome",
-            chatId,
-            from: "admin",
-            type: "text",
-            content:
-              "👋 Welcome to Support. A representative will be with you shortly. Please share your booking or payment inquiry.",
-            timestamp: Date.now().toString(),
-          },
-        ];
+
+
+
+
+
+useEffect(() => {
+  if (!chatId || !user || user.email === ADMIN_EMAIL) return; // Only for normal users
+
+  // Track sent welcome messages in localStorage
+  const sentWelcomeMap: Record<string, boolean> = JSON.parse(
+    localStorage.getItem("welcomeSentMap") || "{}"
+  );
+
+  if (sentWelcomeMap[chatId]) return; // Already sent
+
+  // Send welcome message from admin
+  sendMessage({
+    variables: {
+      chatId,
+      from: "admin",
+      type: "text",
+      content: `Hello ${user.name || "there"}! 👋 Welcome to The Fetish Fortress Club House! How can we help today?`,
+    },
+  });
+
+  // Mark as sent
+  sentWelcomeMap[chatId] = true;
+  localStorage.setItem("welcomeSentMap", JSON.stringify(sentWelcomeMap));
+}, [chatId, user, sendMessage]);
+
+
+// Merge messages
+const allMessages: Message[] = [
+  ...(messagesData?.getMessages || []),
+  ...bookingMessages,
+];
+
+// Sort messages by timestamp
+allMessages.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
 
   const isMyMessage = (msg: Message) => {
     if (!user) return false;
@@ -254,218 +337,209 @@ const handleClose = () => {
 
   return (
     <>
-    
+   <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end space-y-2">
+  {/* Teaser bubble */}
+  {showTeaser && !isOpen && (
+    <div
+      onClick={() => {
+        setIsOpen(true);
+        setShowTeaser(false);
+      }}
+      className="max-w-[220px] bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-2xl shadow-md cursor-pointer text-sm animate-bounce"
+    >
+      Welcome to The Fetish Fortress Club House! 👋 How can we help?
+    </div>
+  )}
 
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end space-y-2">
-        {/* Teaser bubble */}
-        {showTeaser && !isOpen && (
-          <div
-            onClick={() => {
-              setIsOpen(true);
-              setShowTeaser(false);
-            }}
-            className="max-w-[220px] bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-2xl shadow-md cursor-pointer text-sm animate-bounce"
-          >
-            Welcome to Pandora Goddess Club House! 👋 How can we help?
+  {/* Floating open button */}
+  {!isOpen && (
+    <button
+      onClick={() => setIsOpen(true)}
+      className="bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-full shadow-lg"
+    >
+      <MessageCircle size={24} />
+    </button>
+  )}
+
+  {/* Chat modal */}
+  {isOpen && (
+    <div
+      ref={modalRef}
+      className="bg-gray-900 text-white rounded-2xl shadow-2xl w-80 sm:w-96 h-[32rem] flex flex-col"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between bg-pink-500 px-4 py-2 sticky top-0 z-10">
+        <h4 className="font-semibold">Live Chat</h4>
+        <button onClick={handleClose}>
+          <X size={20} />
+        </button>
+      </div>
+
+      {/* Scrollable body */}
+      <div className="flex-1 overflow-y-auto">
+        {/* Admin Chat List */}
+        {user?.email === ADMIN_EMAIL && !chatId && (
+          <div className="p-4 flex-1 overflow-y-auto space-y-3">
+            <div className="flex items-center justify-between mb-3">
+              <h1 className="text-lg font-bold text-pink-400">
+                {showArchived ? "Archived Chats" : "Active Chats"}
+              </h1>
+              <button
+                onClick={() => setShowArchived((prev) => !prev)}
+                className="flex items-center gap-1 bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded-lg text-sm"
+              >
+                <Archive size={16} />
+                {showArchived ? "Show Active" : "Show Archived"}
+              </button>
+            </div>
+
+            {(showArchived
+              ? archivedChatsData?.getArchivedChats
+              : allChatsData?.getAllChats
+            )?.map((c) => (
+              <div
+                key={c.id}
+                className="bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-xl p-3 flex justify-between items-center shadow-md"
+              >
+                <div
+                  onClick={() => {
+                    setChatId(c.id);
+                    setSelectedChat(c);
+             setSelectedChatUserId(c.id); 
+                  }}
+                  className="flex-1"
+                >
+                  <div className="text-white font-semibold truncate">
+                    {c.name || c.id}
+                  </div>
+                  <div className="text-gray-400 text-xs mt-1 truncate">
+                    Chat ID: {c.id}
+                  </div>
+                </div>
+                <button
+                  onClick={() =>
+                    c.archived
+                      ? unarchiveChat({ variables: { chatId: c.id } })
+                      : archiveChat({ variables: { chatId: c.id } })
+                  }
+                  className="ml-2 text-gray-400 hover:text-white"
+                  title={c.archived ? "Unarchive" : "Archive"}
+                >
+                  <Archive size={18} />
+                </button>
+              </div>
+            )) || (
+              <div className="text-center text-gray-400 mt-6">
+                No chats available
+              </div>
+            )}
           </div>
         )}
 
-        {/* Floating open button */}
-        {!isOpen && (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-full shadow-lg"
-          >
-            <MessageCircle size={24} />
-          </button>
-        )}
+        {/* Messages & Bookings */}
+        {chatId && (
+          <div className="flex-1 flex flex-col">
+            <ChatHeader />
 
-        {/* Chat modal */}
-        {isOpen && (
-      <div
-  ref={modalRef}
-  className="bg-gray-900 text-white rounded-2xl shadow-2xl w-80 sm:w-96 h-[32rem] flex flex-col"
->
-  {/* Header (fixed inside modal) */}
-  <div className="flex items-center justify-between bg-pink-500 px-4 py-2 sticky top-0 z-10">
-    <h4 className="font-semibold">Live Chat</h4>
-    <button onClick={handleClose}>
-      <X size={20} />
-    </button>
-  </div>
+            <main className="flex-1 flex flex-col w-full p-3 relative overflow-hidden">
+             
 
-  {/* Scrollable body */}
-  <div className="flex-1 overflow-y-auto">
-      {/* Admin Chat List */}
-            {user?.email === ADMIN_EMAIL && !chatId && (
-              <div className="p-4 flex-1 overflow-y-auto space-y-3">
-                <div className="flex items-center justify-between mb-3">
-                  <h1 className="text-lg font-bold text-pink-400">
-                    {showArchived ? "Archived Chats" : "Active Chats"}
-                  </h1>
-                  <button
-                    onClick={() => setShowArchived((prev) => !prev)}
-                    className="flex items-center gap-1 bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded-lg text-sm"
-                  >
-                    <Archive size={16} />
-                    {showArchived ? "Show Active" : "Show Archived"}
-                  </button>
-                </div>
-
-                {(showArchived
-                  ? archivedChatsData?.getArchivedChats
-                  : allChatsData?.getAllChats
-                )?.map((c) => (
+              {/* Messages */}
+              <div
+                ref={messagesContainerRef}
+                className="flex-1 bg-gray-800 rounded-xl p-3 flex flex-col overflow-y-auto space-y-3"
+              >
+                {allMessages.map((msg) => (
                   <div
-                    key={c.id}
-                    className="bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-xl p-3 flex justify-between items-center shadow-md"
+                    key={msg.id}
+                    className={`max-w-[80%] p-2 rounded-xl break-words text-sm shadow-md flex flex-col ${
+                      isMyMessage(msg)
+                        ? "bg-pink-500 self-end text-white"
+                        : "bg-gray-700 self-start text-gray-200"
+                    }`}
                   >
-                    <div
-                      onClick={() => {
-                        setChatId(c.id);
-                        setSelectedChat(c);
-                      }}
-                    >
-                      <div className="text-white font-semibold truncate">
-                        {c.name || c.id}
-                      </div>
-                      <div className="text-gray-400 text-xs mt-1 truncate">
-                        Chat ID: {c.id}
-                      </div>
+                    <div className="text-[10px] text-gray-300 mb-1">
+                      {msg.from === "admin"
+                        ? "Chat Support"
+                        : selectedChat?.name || "User"}
                     </div>
-                    <button
-                      onClick={() =>
-                        c.archived
-                          ? unarchiveChat({ variables: { chatId: c.id } })
-                          : archiveChat({ variables: { chatId: c.id } })
-                      }
-                      className="ml-2 text-gray-400 hover:text-white"
-                      title={c.archived ? "Unarchive" : "Archive"}
-                    >
-                      <Archive size={18} />
-                    </button>
+
+                    <div className="whitespace-pre-wrap break-words">
+                      {msg.content}
+                    </div>
+
+                    <div className="text-[10px] text-gray-400 mt-1 self-end">
+                      {getTime(msg.timestamp)}
+                    </div>
                   </div>
-                )) || (
-                  <div className="text-center text-gray-400 mt-6">
-                    No chats available
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+
+             
+              {/* Input */}
+              <div className="mt-3 flex gap-2 items-end">
+                {file && (
+                  <div className="relative">
+                    <span className="px-2 py-1 bg-gray-700 rounded-lg">
+                      {file.name}
+                    </span>
+                    <button
+                      onClick={() => setFile(null)}
+                      className="absolute -top-2 -right-2 bg-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                    >
+                      ×
+                    </button>
                   </div>
                 )}
+
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  rows={1}
+                  className="flex-1 px-3 py-2 rounded-lg bg-gray-800 text-white text-sm resize-none focus:outline-none overflow-hidden max-h-40 overflow-y-auto"
+                  onInput={(e) => {
+                    e.currentTarget.style.height = "auto";
+                    e.currentTarget.style.height =
+                      e.currentTarget.scrollHeight + "px";
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                />
+
+                <label
+                  htmlFor="file-upload"
+                  className="bg-green-600 hover:bg-green-700 p-2 rounded-lg cursor-pointer flex items-center justify-center"
+                >
+                  <FileText size={18} />
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  className="hidden"
+                />
+
+                <button
+                  onClick={handleSend}
+                  className="bg-pink-500 hover:bg-pink-600 px-3 py-2 rounded-lg flex items-center justify-center"
+                >
+                  <Send size={18} />
+                </button>
               </div>
-            )}
-
-            {/* Messages */}
-            {chatId && (
-              <div className="flex-1 flex flex-col">
-                <ChatHeader />
-                <main className="flex-1 flex flex-col w-full p-3 relative overflow-hidden">
-                  <div
-                    ref={messagesContainerRef}
-                    className="flex-1 bg-gray-800 rounded-xl p-3 flex flex-col overflow-y-auto space-y-3"
-                  >
-                    {messages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`max-w-[80%] p-2 rounded-xl break-words text-sm shadow-md flex flex-col ${
-                          isMyMessage(msg)
-                            ? "bg-pink-500 self-end text-white"
-                            : "bg-gray-700 self-start text-gray-200"
-                        }`}
-                      >
-                        <div className="text-[10px] text-gray-300 mb-1">
-                          {msg.from === "admin"
-                            ? "Chat Support"
-                            : selectedChat?.name || "User"}
-                        </div>
-
-                        <div className="whitespace-pre-wrap break-words">
-                          {msg.content}
-                        </div>
-
-                        <div className="text-[10px] text-gray-400 mt-1 self-end">
-                          {getTime(msg.timestamp)}
-                        </div>
-                      </div>
-                    ))}
-                    <div ref={messagesEndRef} />
-                  </div>
-
-                  {/* Scroll-to-bottom */}
-                  {showScrollButton && (
-                    <button
-                      onClick={() =>
-                        messagesEndRef.current?.scrollIntoView({
-                          behavior: "smooth",
-                        })
-                      }
-                      className="absolute bottom-24 right-6 bg-pink-500 hover:bg-pink-600 p-2 rounded-full shadow-lg"
-                    >
-                      <ArrowDownCircle size={22} />
-                    </button>
-                  )}
-
-                  {/* Input */}
-                  <div className="mt-3 flex gap-2 items-end">
-                    {file && (
-                      <div className="relative">
-                        <span className="px-2 py-1 bg-gray-700 rounded-lg">
-                          {file.name}
-                        </span>
-                        <button
-                          onClick={() => setFile(null)}
-                          className="absolute -top-2 -right-2 bg-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    )}
-
-                    <textarea
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      placeholder="Type your message..."
-                      rows={1}
-                      className="flex-1 px-3 py-2 rounded-lg bg-gray-800 text-white text-sm resize-none focus:outline-none overflow-hidden max-h-40 overflow-y-auto"
-                      onInput={(e) => {
-                        e.currentTarget.style.height = "auto";
-                        e.currentTarget.style.height =
-                          e.currentTarget.scrollHeight + "px";
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSend();
-                        }
-                      }}
-                    />
-
-                    <label
-                      htmlFor="file-upload"
-                      className="bg-green-600 hover:bg-green-700 p-2 rounded-lg cursor-pointer flex items-center justify-center"
-                    >
-                      <FileText size={18} />
-                    </label>
-                    <input
-                      id="file-upload"
-                      type="file"
-                      onChange={(e) => setFile(e.target.files?.[0] || null)}
-                      className="hidden"
-                    />
-
-                    <button
-                      onClick={handleSend}
-                      className="bg-pink-500 hover:bg-pink-600 px-3 py-2 rounded-lg flex items-center justify-center"
-                    >
-                      <Send size={18} />
-                    </button>
-                  </div>
-                </main>
-              </div>
-            )}
-  </div>
-</div>
-
+            </main>
+          </div>
         )}
       </div>
+    </div>
+  )}
+</div>
+
     </>
   );
 }

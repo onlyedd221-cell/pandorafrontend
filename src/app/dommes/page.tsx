@@ -441,7 +441,7 @@ return (
           We are Looking for New Dommes
         </h2>
         <p className="text-lg sm:text-xl mb-6 font-light">
-          Do you think you have what it takes to become a Mistress at Pandora Goddess Clubhouse Dungeon NY?
+          Do you think you have what it takes to become a Mistress at The Fetish Fortress Club House Dungeon NY?
         </p>
         <Link
           href="/applyPage" // replace with your actual application page
