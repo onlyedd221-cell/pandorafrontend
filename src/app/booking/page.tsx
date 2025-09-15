@@ -128,7 +128,11 @@ export default function BookingPage() {
         {/* Page Header */}
         <section className="text-center space-y-2">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+<<<<<<< HEAD
          The Fetish Fortress Club House
+=======
+            The Fetish Fortress 
+>>>>>>> 709d1a9319fb10d7ff21845bf549be202798754c
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">
             Book A Session
