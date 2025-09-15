@@ -572,12 +572,8 @@ useEffect(() => {
         className="py-16 px-6 bg-gradient-to-b from-gray-900 to-black"
       >
         <h3 className="text-3xl sm:text-4xl font-bold text-center mb-12">
-<<<<<<< HEAD
          The Fetish Fortress Blog
         </h3>
-=======
-Fetish Fortress Blog        </h3>
->>>>>>> 709d1a9319fb10d7ff21845bf549be202798754c
         <div className="grid md:grid-cols-3 gap-8">
           {blogPosts.map((post) => (
             <div
